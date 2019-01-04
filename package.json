@@ -1,0 +1,29 @@
+{
+  "name": "oudoperator",
+  "version": "1.0.0",
+  "description": "The library to use the string read from OuDia file",
+  "main": "./dist/OudOperator.bundle.js",
+  "types": "./src/index.d.ts",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/up-tri/OudOperator.git"
+  },
+  "author": "up-tri <contact@up-tri.me> (https://up-tri.me)",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/up-tri/OudOperator/issues"
+  },
+  "homepage": "https://github.com/up-tri/OudOperator#readme",
+  "dependencies": {
+    "typescript": "^3.2.2"
+  },
+  "devDependencies": {
+    "prettier": "^1.15.3"
+  }
+}
