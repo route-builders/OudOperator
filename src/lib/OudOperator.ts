@@ -419,6 +419,109 @@ export class DataSet {
     }
 
     /**
+     * A method to parse and store data deriverd from lines array of OuDiaSecond v1.05
+     * @param {Array<string>} lines rows array of OuDia file
+     */
+    public fromOud2(lines:Array<string>):Promise<any>{
+        return new Promise((resolve: () => void, _: (reason?: any) => void) => {
+            //propertyStack is stack of oudia's datatree
+            let propertyStack:Array<string>=new Array<string>();
+            let property:string="";
+
+            let mStation=new Station();
+            let mStop=new Stop();
+            let mTrainType=new TrainType();
+            let mDia=new Diagram();
+            let mStreak=new Streak();
+            /**
+             *   Indicates the direction of the reading train
+             *      - 10 ... area of downward timetable
+             *      - 20 ... area of upward timetable
+             *      - 0  ... no information
+             */
+            let direct=0;
+
+            for(let i=0;i<lines.length;i++){
+                if(lines[i]=="."){
+                    property=propertyStack.pop();
+                    if(property==""){
+                        break;
+                    }
+                    continue;
+                }
+                if(lines[i].endsWith(".")){
+                    propertyStack.push(property);
+                    property=lines[i].substring(0,lines[i].length-1);
+                    if(property=="Ressya"){
+                        mStreak=new Streak();
+                        switch (direct) {
+                            case 10:
+                                mDia.downStreaks.push(mStreak);
+                                break;
+                            case 20:
+                                mDia.upStreaks.push(mStreak);
+                                break;
+                            default:
+                            //null direction is set.
+                        }
+                    }
+                    if(property=="EkiTrack2") {
+                        mStop=new Stop();
+                        mStation.stops.push(mStop);
+                    }
+                    if(property=="Eki"){
+                        //start to read one Station.
+                        mStation=new Station();
+                        this.stations.push(mStation);
+                    }
+                    if(property=="Ressyasyubetsu") {
+                        //start to read one traintype
+                        mTrainType=new TrainType();
+                        this.trainTypes.push(mTrainType);
+                    }
+                    if(property=="Dia") {
+                        mDia=new Diagram();
+                        this.diagrams.push(mDia);
+                    }
+                    if(property=="Kudari") {
+                        direct=10;
+                    }
+                    if(property=="Nobori") {
+                        direct=20;
+                    }
+
+                    continue;
+                }
+                let command=DataSet.command(lines[i]);
+                let value=DataSet.command(lines[i]);
+                if(property=="Ressya"){
+                    mStreak.setValue(command,value);
+                }
+                if(property=="EkiTrack2"){
+                    mStop.setValue(command,value);
+                }
+                if(property=="Eki"){
+                    mStation.setValue(command,value);
+                }
+                if(property=="Ressyasyubetsu"){
+                    mTrainType.setValue(command,value);
+                }
+                if(property=="Dia"){
+                    mDia.setValue(command,value);
+                }
+                if(property=="Rosen"){
+                    this.setValue(command,value);
+                }
+
+            }
+
+            resolve();
+        }).then(() => {})
+            .catch(() => console.log('ERROR'))
+
+    }
+
+    /**
      * A method to parse and store data derived from lines array of OuDia file's text.
      *
      * @param {Array<string>} lines rows array of OuDia file
@@ -1278,6 +1381,44 @@ export class Station {
             default:
                 return 10
         }
+    }
+
+
+}
+
+/**
+ * A class of Stop in Station
+ * Sometimes, this is called platform
+ *
+ * oudia2ndのEkiTrack2Contに対応
+ */
+export class Stop{
+    /**
+     * 番線名
+     * stop name
+     * @type {string}
+     */
+    private _name:string;
+    public get name():string{
+        return this._name;
+    }
+    public set name(v:string){
+        this._name=v;
+    }
+
+    /**
+     * 種別略称
+     *
+     * 数字もしくはアルファベットを推奨する。
+     *
+     * Abbreviation for stop name
+     */
+    private _shortName:string;
+    public get shortName():string{
+        return this._shortName;
+    }
+    public set shortName(v:string){
+        this._shortName=v;
     }
 }
 
