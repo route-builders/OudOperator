@@ -424,8 +424,19 @@ export class DataSet {
      */
     public fromOud2(lines:Array<string>):Promise<any>{
         return new Promise((resolve: () => void, _: (reason?: any) => void) => {
-            //propertyStack is stack of oudia's datatree
+            /**
+             *  propertyStack is stack of nested parent's
+             *
+             *  oudia file format has nested list
+             *  "Hoge." start Hoge node  and "." end current node
+             *
+             *  stack is pushed when found new node
+             *  stack is poped when end current node
+             */
             let propertyStack:Array<string>=new Array<string>();
+            /**
+             *  current node name
+             */
             let property:string="";
 
             let mStation=new Station();
@@ -443,6 +454,7 @@ export class DataSet {
 
             for(let i=0;i<lines.length;i++){
                 if(lines[i]=="."){
+                    //end current node
                     property=propertyStack.pop();
                     if(property==""){
                         break;
@@ -450,6 +462,7 @@ export class DataSet {
                     continue;
                 }
                 if(lines[i].endsWith(".")){
+                    //start new node
                     propertyStack.push(property);
                     property=lines[i].substring(0,lines[i].length-1);
                     if(property=="Ressya"){
@@ -470,12 +483,10 @@ export class DataSet {
                         mStation.stops.push(mStop);
                     }
                     if(property=="Eki"){
-                        //start to read one Station.
                         mStation=new Station();
                         this.stations.push(mStation);
                     }
                     if(property=="Ressyasyubetsu") {
-                        //start to read one traintype
                         mTrainType=new TrainType();
                         this.trainTypes.push(mTrainType);
                     }
