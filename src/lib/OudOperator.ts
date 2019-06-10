@@ -1394,7 +1394,57 @@ export class Station {
         }
     }
 
-
+    /**
+     * oudiaファイルの１行を用いて情報を追加します
+     * oudia ファイルは=でキーと値が結ばれている
+     *
+     * @param command key of the line of oudia file
+     * @param value   value of the line of oudia file
+     */
+    public setValue(command:string,value:string){
+        switch (command) {
+            case "Ekimei":
+                this.name=value;
+                break;
+            case "Ekijikokukeisiki":
+                this.timeType=Station.timeTypeToInt(value);
+                break;
+            case "Ekikibo":
+                this.scale=Station.scaleToInt(value);
+                break;
+            case "DiagramRessyajouhouHyoujiKudari":
+                this.trainInfoDown=Station.trainInfoToInt(value);
+                break;
+            case "DiagramRessyajouhouHyoujiNobori":
+                this.trainInfoUp=Station.trainInfoToInt(value);
+                break;
+            case "DownMain":
+                this.mainLineDown=parseInt(value);
+                break;
+            case "UpMain":
+                this.mainLineUp=parseInt(value);
+                break;
+            case "LoopOriginEkiIndex":
+                //todo
+                break;
+            case "BrunchCoreEkiIndex":
+                //todo
+                //分岐駅の扱いがoudとoud2ndで別なので要調整
+                break;
+            case "JikokuhyouTrackDisplayKudari":
+                this.shouldShowLineNumberDown=(value=="1");
+                break;
+            case "JikokuhyouTrackDisplayNobori":
+                this.shouldShowLineNumberUp=(value=="1");
+                break;
+            case "DiagramTrackDisplay":
+                this.shouldShowLines=(value=="1");
+                break;
+            case "NextEkiDistance":
+                //todo
+                break;
+        }
+    }
 }
 
 /**
