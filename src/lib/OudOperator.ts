@@ -279,6 +279,11 @@ interface EndpointWork {
     //     arrival?: Time,
     //     operationNum?: string,
     // ): EndpointWork;
+    /**
+     * 10 exchange track
+     * 20 go or leave yard
+     * 30 first or last station is out of this line
+     */
     worktype: number
     track?: number
     departure?: Time
@@ -1826,6 +1831,85 @@ export class Streak {
     public set comment(v: string) {
         this._comment = v
     }
+
+    public setValue(command:string,value:string){
+        switch (command) {
+            case "Syubetsu":
+                this.typeIdx=parseInt(value);
+                break;
+            case "Ressyabangou":
+                this.operationNum=value;
+                break;
+            case "Ressyamei":
+                this.name=value;
+                break;
+            case "Gousuu":
+                this.no=value;
+                break;
+            case "EkiJikoku":
+                let timeList=value.split(",");
+                for(let i=0;i<timeList.length;i++){
+                    let mStHanding=new StHandling();
+                    this.stHandlings.push(mStHanding);
+                    if(timeList[i].indexOf(";")!=-1){
+                        mStHanding.type=parseInt(timeList[i].split(";")[0]);
+                        let mTimeList=timeList[i].split(";")[1].split("/");
+                        if(mTimeList.length==2){
+                                mStHanding.arrival.setTime(mTimeList[0]);
+                            if(mTimeList[1].length!=0){
+                                mStHanding.departure.setTime(mTimeList[1]);
+                            }
+                        }else{
+                            mStHanding.departure.setTime(mTimeList[0]);
+                        }
+                    }else{
+                        mStHanding.type=parseInt(timeList[i]);
+                    }
+               }
+                break;
+            case "RessyaTrack":
+                let trackList=value.split(",");
+                for(let i=0;i<trackList.length;i++){
+                    if(trackList[i].length==0){
+                        continue;
+                    }
+                    let mStHanding=this.stHandlings[i];
+                    let a=trackList[i].split(";");
+                    mStHanding.track=parseInt(a[0]);
+                    if(a.length>=2){
+                        let b=a[1].split("/");
+                        switch (b[0]) {
+                            case "0":
+                                break;
+                            case "1":
+                                mStHanding.endpointWork.worktype=10;
+                                mStHanding.endpointWork.track=parseInt(b[1].split("$")[0]);
+                                mStHanding.endpointWork.arrival.setTime(b[1].split("$")[1]);
+                                mStHanding.endpointWork.departure.setTime(b[2]);
+                                break;
+                            case "2":
+                                mStHanding.endpointWork.worktype=20;
+                                mStHanding.endpointWork.operationNum=b[1];
+                                break;
+                            case "3":
+                                mStHanding.endpointWork.worktype=30;
+                                //todo
+                                b[1].split("$")[0];//first last station index
+                                b[1].split("$")[1];//first last station time
+                                mStHanding.endpointWork.operationNum=b[2];
+
+                                break;
+
+                        }
+                    }
+                }
+                break;
+            case "Bikou":
+                this,command=value;
+                break;
+        }
+    }
+
 }
 
 /**
