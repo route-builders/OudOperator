@@ -1640,6 +1640,53 @@ export class TrainType {
                 return 0
         }
     }
+
+    /**
+     * command valueのセットを用いて情報を追加します
+     * @param command   key of oudia file style
+     * @param value     value of oudia file style
+     */
+    public setvalue(command:string,value:string){
+        switch (command) {
+            case "Syubetsumei":
+                this.name=value;
+                break;
+            case "Ryakusyou":
+                this.shortname=value;
+                break;
+            case "JikokuhyouMojiColor":
+                this.trainColor.setFromABGR(value);
+                break;
+            case "JikokuhyouFontIndex":
+                this.fontIdx=parseInt(value);
+                break;
+            case "JikokuhyouBackColor":
+                //todo backColorが未実装
+                //this.backColor.setFromABGR(value);
+                break;
+            case "DiagramSenColor":
+                this.lineColor.setFromABGR(value);
+                break;
+            case "DiagramSenStyle":
+                this.lineType=TrainType.lineStyleToInt(value);
+                break;
+            case "DiagramSenIsBold":
+                if(value=="1"){
+                    this.lineWeight=2;
+                }else{
+                    this.lineWeight=0;
+                }
+                break;
+            case "StopMarkDrawType":
+                    this.shoudDrawStopMark=(value=="EStopMarkDrawType_DrawOnStop");
+                break;
+            case "ParentSyubetsuIndex":
+                //todo
+                //no proparty of parent TrainType
+                break;
+        }
+
+    }
 }
 export class Diagram {
     /**
