@@ -1651,7 +1651,7 @@ export class TrainType {
      * @param command   key of oudia file style
      * @param value     value of oudia file style
      */
-    public setvalue(command:string,value:string){
+    public setValue(command:string,value:string){
         switch (command) {
             case "Syubetsumei":
                 this.name=value;
