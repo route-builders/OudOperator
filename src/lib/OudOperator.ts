@@ -1481,6 +1481,19 @@ export class Stop{
     public set shortName(v:string){
         this._shortName=v;
     }
+    /**
+     * oudiaファイルの１行を用いて情報を追加する
+     */
+    public setValue(command:string,value:string){
+        switch (command) {
+            case "TrackName":
+                this.name=value;
+                break;
+            case "TrackRyakusyou":
+                this.shortName=value;
+                break;
+        }
+    }
 }
 
 /**
