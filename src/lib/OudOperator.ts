@@ -528,6 +528,12 @@ export class DataSet {
                 if(property=="Rosen"){
                     this.setValue(command,value);
                 }
+                if(property=="DispProp"){
+                    this.setValue(command,value);
+                }
+                if(property==""){
+                    this.setValue(command,value);
+                }
 
             }
 
@@ -1038,6 +1044,78 @@ export class DataSet {
             //     }
             // }
         })
+    }
+    public setValue(command:string,value:string){
+        switch (command) {
+            case "FileType":
+                break;
+            case "FileTypeAppComment":
+                break;
+            case "Rosenmei":
+                this.name=value;
+                break;
+            case "KudariDiaAlias":
+                //todo
+                //下り時刻表名をこれで置き換える機能は未実装
+                break;
+            case "NoboriDiaAlias":
+                //todo
+                //上り時刻表名をこれで置き換える機能は未実装
+                break;
+            case "KitenJikoku":
+                break;
+            case "DiagramDgrYZahyouKyoriDefault":
+                break;
+            case "Comment":
+                break;
+            case "JikokuhyouFont":
+                break;
+            case "JikokuhyouVFont":
+                break;
+            case "DiaEkimeiFont":
+                break;
+            case "DiaJikokuFont":
+                break;
+            case "DiaRessyaFont":
+                break;
+            case "CommentFont":
+                break;
+            case "DiaMojiColor":
+                break;
+            case "DiaHaikeiColor":
+                break;
+            case "DiaRessyaColor":
+                break;
+            case "DiaJikuColor":
+                break;
+            case "JikokuhyouBackColor":
+                break;
+            case "StdOpeTimeLowerColor":
+                break;
+            case "StdOpeTimeHigherColor":
+                break;
+            case "StdOpeTimeUndefColor":
+                break;
+            case "StdOpeTimeIllegalColor":
+                break;
+            case "EkimeiLength":
+                break;
+            case "JikokuhyouRessyaWidth":
+                break;
+            case "AnySecondIncDec1":
+                break;
+            case "AnySecondIncDec2":
+                break;
+            case "DisplayRessyamei":
+                break;
+            case "DisplayOuterTerminalEkimeiOriginSide":
+                break;
+            case "DisplayOuterTerminalEkimeiTerminalSide":
+                break;
+            case "DiagramDisplayOuterTerminal":
+                break;
+        }
+
     }
 
     // private static getStationFromLines(
@@ -1727,6 +1805,27 @@ export class Diagram {
     }
     public set upStreaks(v: Array<Streak>) {
         this._upStreaks = v
+    }
+    public setValue(command:string,value:string){
+        switch (command) {
+            case "DiaName":
+                this.name=value;
+                break;
+            case "MainBackColorIndex":
+                //todo
+                //背景色未実装
+                break;
+            case "SubBackColorIndex":
+                //todo
+                //副背景未実装
+                break;
+            case "BackPatternIndex":
+                //todo
+                //背景パターン未実装
+                break;
+
+        }
+
     }
 }
 /**
