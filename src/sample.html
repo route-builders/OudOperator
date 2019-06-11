@@ -2,10 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="lib/OudOperator.ts"></script>
+    <script src="lib/OudOperator.js"></script>
+    <script>
+
+        function inputFile(files){
+            console.log(files[0]);
+            var reader=new FileReader();
+            reader.readAsText(files[0]);
+            reader.addEventListener('load',function(){
+                finishLoadFile(reader.result);
+            });
+        }
+        function finishLoadFile(result){
+            var data=new DataSet();
+            data.fromOud2(result.split("\r\n")).then(function(){
+                console.log(data);
+                var str = JSON.stringify(data);
+                var blob = new Blob([str], { "type": "application/x-msdownload" });
+                var download = document.getElementById("download");
+                download.href = window.URL.createObjectURL(blob);
+                download.download = this.lineName + ".aod";
+                console.log("download");
+                download.click();
+
+            });
+        }
+
+    </script>
     <title>実行サンプル用</title>
 </head>
 <body>
+<form>
+    <input type="file" multiple onchange="inputFile(this.files)">
+</form>
+<a id="download"></a>
 
 </body>
 </html>

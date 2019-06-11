@@ -269,9 +269,48 @@ export class Time {
     }
 }
 
-declare var EndpointWork: EndpointWork
 
-interface EndpointWork {
+/**
+ * 始終着駅操作
+ *
+ *
+ */
+class EndpointWork implements EndpointWorkI{
+    // new(
+    //     worktype: number,
+    //     track?: number,
+    //     departure?: Time,
+    //     arrival?: Time,
+    //     operationNum?: string,
+    // ): EndpointWork;
+    /**
+     * 10 exchange track
+     * 20 go or leave yard
+     * 30 first or last station is out of this line
+     */
+    worktype: number
+    /**
+     * 入れ替え番線
+     */
+    track?: number
+    /**
+     * 入れ替え発時刻
+     */
+    departure?: Time
+    /**
+     * 入れ替え着時刻
+     */
+    arrival?: Time
+    /**
+     * 運用番号
+     */
+    operationNum?: string
+}
+
+/**
+ * とりあえずインターフェースは名前を変えて退避
+ */
+interface EndpointWorkI {
     // new(
     //     worktype: number,
     //     track?: number,
@@ -299,6 +338,7 @@ interface EndpointWork {
  */
 export class DataSet {
     private _fileStruct: any
+    private loadingStartTime=0;
     public get fileStruct(): any {
         return this._fileStruct
     }
@@ -399,7 +439,7 @@ export class DataSet {
      * @param {string} str line
      * @return {string} A string of property key
      */
-    private static command(str: string): string {
+    private static command(str:string): string {
         return str.split(/=/)[0]
     }
 
@@ -428,6 +468,7 @@ export class DataSet {
      * @param {Array<string>} lines rows array of OuDia file
      */
     public fromOud2(lines:Array<string>):Promise<any>{
+        let starttime=new Date().getTime();
         return new Promise((resolve: () => void, _: (reason?: any) => void) => {
             /**
              *  propertyStack is stack of nested parent's
@@ -460,10 +501,10 @@ export class DataSet {
             for(let i=0;i<lines.length;i++){
                 if(lines[i]=="."){
                     //end current node
-                    property=propertyStack.pop();
-                    if(property==""){
+                    if(propertyStack.length==0) {
                         break;
                     }
+                    property=propertyStack.pop();
                     continue;
                 }
                 if(lines[i].endsWith(".")){
@@ -509,7 +550,7 @@ export class DataSet {
                     continue;
                 }
                 let command=DataSet.command(lines[i]);
-                let value=DataSet.command(lines[i]);
+                let value=DataSet.value(lines[i]);
                 if(property=="Ressya"){
                     mStreak.setValue(command,value);
                 }
@@ -536,10 +577,18 @@ export class DataSet {
                 }
 
             }
+            let endtime=new Date().getTime();
+            console.log("loading time="+(endtime-starttime));
 
             resolve();
         }).then(() => {})
-            .catch(() => console.log('ERROR'))
+            .catch(function(e:any){
+                console.log(e);
+                if ( e.fileName && e.lineNumber ) {
+                    // エラーの発生場所が取れる場合は、情報を追加する
+                    console.log("ファイル:" + e.fileName + ", 行:" + e.lineNumber);
+                }
+            });
 
     }
 
@@ -551,6 +600,7 @@ export class DataSet {
      */
     public fromOud(lines: Array<string>): Promise<any> {
         return new Promise((resolve: () => void, _: (reason?: any) => void) => {
+            this.loadingStartTime=new Date().getTime();
             /**
              * In order to carry out the analysis smoothly,
              * analyze the line number in which constituent elements
@@ -1034,7 +1084,11 @@ export class DataSet {
                     Promise.all(promises).then(resolve)
                 }),
             ])
-                .then(() => {})
+                .then(() => {
+                    let endTime=new Date().getTime();
+                    console.log("loading time:"+(endTime-this.loadingStartTime));
+
+                })
                 .catch(() => console.log('ERROR'))
 
             // // for Rosen
@@ -1048,25 +1102,29 @@ export class DataSet {
     public setValue(command:string,value:string){
         switch (command) {
             case "FileType":
+                this.fileType=value;
                 break;
             case "FileTypeAppComment":
+                this.fileTypeAppComment=value;
                 break;
             case "Rosenmei":
                 this.name=value;
                 break;
             case "KudariDiaAlias":
-                //todo
-                //下り時刻表名をこれで置き換える機能は未実装
+                //下り時刻表名をこれで置き換える
                 break;
             case "NoboriDiaAlias":
-                //todo
-                //上り時刻表名をこれで置き換える機能は未実装
+                //上り時刻表名をこれで置き換える
                 break;
             case "KitenJikoku":
+                //todo
+                //ダイヤグラム起点時刻
                 break;
             case "DiagramDgrYZahyouKyoriDefault":
                 break;
             case "Comment":
+                //コメント読み書き
+                //todo
                 break;
             case "JikokuhyouFont":
                 break;
@@ -1323,7 +1381,7 @@ export class Station {
      * Used in a file of a different software format (.oud2) .
      *
      */
-    private _tracks:Track[];
+    private _tracks:Track[]=new Array<Track>();
     public get tracks(): Track[] {
         return this._tracks
     }
@@ -2077,7 +2135,7 @@ export class StHandling {
         this._track = v
     }
 
-    private _endpointWork: EndpointWork = EndpointWork
+    private _endpointWork: EndpointWork = new EndpointWork();
     public get endpointWork(): EndpointWork {
         return this._endpointWork
     }

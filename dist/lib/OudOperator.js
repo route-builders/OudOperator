@@ -238,6 +238,13 @@ class Time {
 }
 exports.Time = Time;
 /**
+ * 始終着駅操作
+ *
+ *
+ */
+class EndpointWork {
+}
+/**
  * A class with a data structure such as OuDia file.
  *
  * @author up-tri
@@ -250,6 +257,7 @@ class DataSet {
     // private diagramStartTime: number = 0
     // private stationSpacing: number = 0
     constructor() {
+        this.loadingStartTime = 0;
         /**
          * filetype
          */
@@ -360,6 +368,128 @@ class DataSet {
         return [DataSet.command(str), DataSet.value(str)];
     }
     /**
+     * A method to parse and store data deriverd from lines array of OuDiaSecond v1.05
+     * @param {Array<string>} lines rows array of OuDia file
+     */
+    fromOud2(lines) {
+        let starttime = new Date().getTime();
+        return new Promise((resolve, _) => {
+            /**
+             *  propertyStack is stack of nested parent's
+             *
+             *  oudia file format has nested list
+             *  "Hoge." start Hoge node  and "." end current node
+             *
+             *  stack is pushed when found new node
+             *  stack is poped when end current node
+             */
+            let propertyStack = new Array();
+            /**
+             *  current node name
+             */
+            let property = "";
+            let mStation = new Station();
+            let mStop = new Track();
+            let mTrainType = new TrainType();
+            let mDia = new Diagram();
+            let mStreak = new Streak();
+            /**
+             *   Indicates the direction of the reading train
+             *      - 10 ... area of downward timetable
+             *      - 20 ... area of upward timetable
+             *      - 0  ... no information
+             */
+            let direct = 0;
+            for (let i = 0; i < lines.length; i++) {
+                if (lines[i] == ".") {
+                    //end current node
+                    if (propertyStack.length == 0) {
+                        break;
+                    }
+                    property = propertyStack.pop();
+                    continue;
+                }
+                if (lines[i].endsWith(".")) {
+                    //start new node
+                    propertyStack.push(property);
+                    property = lines[i].substring(0, lines[i].length - 1);
+                    if (property == "Ressya") {
+                        mStreak = new Streak();
+                        switch (direct) {
+                            case 10:
+                                mDia.downStreaks.push(mStreak);
+                                break;
+                            case 20:
+                                mDia.upStreaks.push(mStreak);
+                                break;
+                            default:
+                            //null direction is set.
+                        }
+                    }
+                    if (property == "EkiTrack2") {
+                        mStop = new Track();
+                        mStation.tracks.push(mStop);
+                    }
+                    if (property == "Eki") {
+                        mStation = new Station();
+                        this.stations.push(mStation);
+                    }
+                    if (property == "Ressyasyubetsu") {
+                        mTrainType = new TrainType();
+                        this.trainTypes.push(mTrainType);
+                    }
+                    if (property == "Dia") {
+                        mDia = new Diagram();
+                        this.diagrams.push(mDia);
+                    }
+                    if (property == "Kudari") {
+                        direct = 10;
+                    }
+                    if (property == "Nobori") {
+                        direct = 20;
+                    }
+                    continue;
+                }
+                let command = DataSet.command(lines[i]);
+                let value = DataSet.value(lines[i]);
+                if (property == "Ressya") {
+                    mStreak.setValue(command, value);
+                }
+                if (property == "EkiTrack2") {
+                    mStop.setValue(command, value);
+                }
+                if (property == "Eki") {
+                    mStation.setValue(command, value);
+                }
+                if (property == "Ressyasyubetsu") {
+                    mTrainType.setValue(command, value);
+                }
+                if (property == "Dia") {
+                    mDia.setValue(command, value);
+                }
+                if (property == "Rosen") {
+                    this.setValue(command, value);
+                }
+                if (property == "DispProp") {
+                    this.setValue(command, value);
+                }
+                if (property == "") {
+                    this.setValue(command, value);
+                }
+            }
+            let endtime = new Date().getTime();
+            console.log("loading time=" + (endtime - starttime));
+            resolve();
+        }).then(() => { })
+            .catch(function (e) {
+            console.log(e);
+            if (e.fileName && e.lineNumber) {
+                // エラーの発生場所が取れる場合は、情報を追加する
+                console.log("ファイル:" + e.fileName + ", 行:" + e.lineNumber);
+            }
+        });
+    }
+    /**
      * A method to parse and store data derived from lines array of OuDia file's text.
      *
      * @param {Array<string>} lines rows array of OuDia file
@@ -367,6 +497,7 @@ class DataSet {
      */
     fromOud(lines) {
         return new Promise((resolve, _) => {
+            this.loadingStartTime = new Date().getTime();
             /**
              * In order to carry out the analysis smoothly,
              * analyze the line number in which constituent elements
@@ -718,7 +849,10 @@ class DataSet {
                     Promise.all(promises).then(resolve);
                 }),
             ])
-                .then(() => { })
+                .then(() => {
+                let endTime = new Date().getTime();
+                console.log("loading time:" + (endTime - this.loadingStartTime));
+            })
                 .catch(() => console.log('ERROR'));
             // // for Rosen
             // for (let i = 0; i < this.fileStruct.Rosen.length; i++) {
@@ -726,6 +860,81 @@ class DataSet {
             //     }
             // }
         });
+    }
+    setValue(command, value) {
+        switch (command) {
+            case "FileType":
+                this.fileType = value;
+                break;
+            case "FileTypeAppComment":
+                this.fileTypeAppComment = value;
+                break;
+            case "Rosenmei":
+                this.name = value;
+                break;
+            case "KudariDiaAlias":
+                //下り時刻表名をこれで置き換える
+                break;
+            case "NoboriDiaAlias":
+                //上り時刻表名をこれで置き換える
+                break;
+            case "KitenJikoku":
+                //todo
+                //ダイヤグラム起点時刻
+                break;
+            case "DiagramDgrYZahyouKyoriDefault":
+                break;
+            case "Comment":
+                //コメント読み書き
+                //todo
+                break;
+            case "JikokuhyouFont":
+                break;
+            case "JikokuhyouVFont":
+                break;
+            case "DiaEkimeiFont":
+                break;
+            case "DiaJikokuFont":
+                break;
+            case "DiaRessyaFont":
+                break;
+            case "CommentFont":
+                break;
+            case "DiaMojiColor":
+                break;
+            case "DiaHaikeiColor":
+                break;
+            case "DiaRessyaColor":
+                break;
+            case "DiaJikuColor":
+                break;
+            case "JikokuhyouBackColor":
+                break;
+            case "StdOpeTimeLowerColor":
+                break;
+            case "StdOpeTimeHigherColor":
+                break;
+            case "StdOpeTimeUndefColor":
+                break;
+            case "StdOpeTimeIllegalColor":
+                break;
+            case "EkimeiLength":
+                break;
+            case "JikokuhyouRessyaWidth":
+                break;
+            case "AnySecondIncDec1":
+                break;
+            case "AnySecondIncDec2":
+                break;
+            case "DisplayRessyamei":
+                break;
+            case "DisplayOuterTerminalEkimeiOriginSide":
+                break;
+            case "DisplayOuterTerminalEkimeiTerminalSide":
+                break;
+            case "DiagramDisplayOuterTerminal":
+                break;
+        }
     }
 }
 exports.DataSet = DataSet;
@@ -855,9 +1064,8 @@ class Station {
          * This parameter is not used in the conventional format (.oud) .
          * Used in a file of a different software format (.oud2) .
          *
-         * @type { {string, string}[] }
          */
-        this._lines = [];
+        this._tracks = new Array();
         /**
          * 下り本線のindex
          *
@@ -958,11 +1166,11 @@ class Station {
     set shouldShowLines(v) {
         this._shouldShowLines = v;
     }
-    get lines() {
-        return this._lines;
+    get tracks() {
+        return this._tracks;
     }
-    set lines(v) {
-        this._lines = v;
+    set tracks(v) {
+        this._tracks = v;
     }
     get mainLineDown() {
         return this._mainLineDown;
@@ -1066,8 +1274,93 @@ class Station {
                 return 10;
         }
     }
+    /**
+     * oudiaファイルの１行を用いて情報を追加します
+     * oudia ファイルは=でキーと値が結ばれている
+     *
+     * @param command key of the line of oudia file
+     * @param value   value of the line of oudia file
+     */
+    setValue(command, value) {
+        switch (command) {
+            case "Ekimei":
+                this.name = value;
+                break;
+            case "Ekijikokukeisiki":
+                this.timeType = Station.timeTypeToInt(value);
+                break;
+            case "Ekikibo":
+                this.scale = Station.scaleToInt(value);
+                break;
+            case "DiagramRessyajouhouHyoujiKudari":
+                this.trainInfoDown = Station.trainInfoToInt(value);
+                break;
+            case "DiagramRessyajouhouHyoujiNobori":
+                this.trainInfoUp = Station.trainInfoToInt(value);
+                break;
+            case "DownMain":
+                this.mainLineDown = parseInt(value);
+                break;
+            case "UpMain":
+                this.mainLineUp = parseInt(value);
+                break;
+            case "LoopOriginEkiIndex":
+                //todo
+                break;
+            case "BrunchCoreEkiIndex":
+                //todo
+                //分岐駅の扱いがoudとoud2ndで別なので要調整
+                break;
+            case "JikokuhyouTrackDisplayKudari":
+                this.shouldShowLineNumberDown = (value == "1");
+                break;
+            case "JikokuhyouTrackDisplayNobori":
+                this.shouldShowLineNumberUp = (value == "1");
+                break;
+            case "DiagramTrackDisplay":
+                this.shouldShowLines = (value == "1");
+                break;
+            case "NextEkiDistance":
+                //todo
+                break;
+        }
+    }
 }
 exports.Station = Station;
+/**
+ * A class of Track in Station
+ * Sometimes, this is called platform
+ *
+ * oudia2ndのEkiTrack2Contに対応
+ */
+class Track {
+    get name() {
+        return this._name;
+    }
+    set name(v) {
+        this._name = v;
+    }
+    get shortName() {
+        return this._shortName;
+    }
+    set shortName(v) {
+        this._shortName = v;
+    }
+    /**
+     * oudiaファイルの１行を用いて情報を追加する
+     */
+    setValue(command, value) {
+        switch (command) {
+            case "TrackName":
+                this.name = value;
+                break;
+            case "TrackRyakusyou":
+                this.shortName = value;
+                break;
+        }
+    }
+}
+exports.Track = Track;
 /**
  * A class constituting the train type included in this route.
  */
@@ -1146,6 +1439,52 @@ class TrainType {
                 return 0;
         }
     }
+    /**
+     * command valueのセットを用いて情報を追加します
+     * @param command   key of oudia file style
+     * @param value     value of oudia file style
+     */
+    setValue(command, value) {
+        switch (command) {
+            case "Syubetsumei":
+                this.name = value;
+                break;
+            case "Ryakusyou":
+                this.shortname = value;
+                break;
+            case "JikokuhyouMojiColor":
+                this.trainColor.setFromABGR(value);
+                break;
+            case "JikokuhyouFontIndex":
+                this.fontIdx = parseInt(value);
+                break;
+            case "JikokuhyouBackColor":
+                //todo backColorが未実装
+                //this.backColor.setFromABGR(value);
+                break;
+            case "DiagramSenColor":
+                this.lineColor.setFromABGR(value);
+                break;
+            case "DiagramSenStyle":
+                this.lineType = TrainType.lineStyleToInt(value);
+                break;
+            case "DiagramSenIsBold":
+                if (value == "1") {
+                    this.lineWeight = 2;
+                }
+                else {
+                    this.lineWeight = 0;
+                }
+                break;
+            case "StopMarkDrawType":
+                this.shoudDrawStopMark = (value == "EStopMarkDrawType_DrawOnStop");
+                break;
+            case "ParentSyubetsuIndex":
+                //todo
+                //no proparty of parent TrainType
+                break;
+        }
+    }
 }
 exports.TrainType = TrainType;
 class Diagram {
@@ -1184,6 +1523,25 @@ class Diagram {
     }
     set upStreaks(v) {
         this._upStreaks = v;
+    }
+    setValue(command, value) {
+        switch (command) {
+            case "DiaName":
+                this.name = value;
+                break;
+            case "MainBackColorIndex":
+                //todo
+                //背景色未実装
+                break;
+            case "SubBackColorIndex":
+                //todo
+                //副背景未実装
+                break;
+            case "BackPatternIndex":
+                //todo
+                //背景パターン未実装
+                break;
+        }
     }
 }
 exports.Diagram = Diagram;
@@ -1283,6 +1641,83 @@ class Streak {
     set comment(v) {
         this._comment = v;
     }
+    setValue(command, value) {
+        switch (command) {
+            case "Syubetsu":
+                this.typeIdx = parseInt(value);
+                break;
+            case "Ressyabangou":
+                this.operationNum = value;
+                break;
+            case "Ressyamei":
+                this.name = value;
+                break;
+            case "Gousuu":
+                this.no = value;
+                break;
+            case "EkiJikoku":
+                let timeList = value.split(",");
+                for (let i = 0; i < timeList.length; i++) {
+                    let mStHanding = new StHandling();
+                    this.stHandlings.push(mStHanding);
+                    if (timeList[i].indexOf(";") != -1) {
+                        mStHanding.type = parseInt(timeList[i].split(";")[0]);
+                        let mTimeList = timeList[i].split(";")[1].split("/");
+                        if (mTimeList.length == 2) {
+                            mStHanding.arrival.setTime(mTimeList[0]);
+                            if (mTimeList[1].length != 0) {
+                                mStHanding.departure.setTime(mTimeList[1]);
+                            }
+                        }
+                        else {
+                            mStHanding.departure.setTime(mTimeList[0]);
+                        }
+                    }
+                    else {
+                        mStHanding.type = parseInt(timeList[i]);
+                    }
+                }
+                break;
+            case "RessyaTrack":
+                let trackList = value.split(",");
+                for (let i = 0; i < trackList.length; i++) {
+                    if (trackList[i].length == 0) {
+                        continue;
+                    }
+                    let mStHanding = this.stHandlings[i];
+                    let a = trackList[i].split(";");
+                    mStHanding.track = parseInt(a[0]);
+                    if (a.length >= 2) {
+                        let b = a[1].split("/");
+                        switch (b[0]) {
+                            case "0":
+                                break;
+                            case "1":
+                                mStHanding.endpointWork.worktype = 10;
+                                mStHanding.endpointWork.track = parseInt(b[1].split("$")[0]);
+                                mStHanding.endpointWork.arrival.setTime(b[1].split("$")[1]);
+                                mStHanding.endpointWork.departure.setTime(b[2]);
+                                break;
+                            case "2":
+                                mStHanding.endpointWork.worktype = 20;
+                                mStHanding.endpointWork.operationNum = b[1];
+                                break;
+                            case "3":
+                                mStHanding.endpointWork.worktype = 30;
+                                //todo
+                                b[1].split("$")[0]; //first last station index
+                                b[1].split("$")[1]; //first last station time
+                                mStHanding.endpointWork.operationNum = b[2];
+                                break;
+                        }
+                    }
+                }
+                break;
+            case "Bikou":
+                this, command = value;
+                break;
+        }
+    }
 }
 exports.Streak = Streak;
 /**
@@ -1332,7 +1767,7 @@ class StHandling {
          * @type {number}
          */
         this._track = 0;
-        this._endpointWork = EndpointWork;
+        this._endpointWork = new EndpointWork();
         this.type = 0;
         this.arrival = new Time();
         this.departure = new Time();
