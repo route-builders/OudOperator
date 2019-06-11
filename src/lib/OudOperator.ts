@@ -445,7 +445,7 @@ export class DataSet {
             let property:string="";
 
             let mStation=new Station();
-            let mStop=new Stop();
+            let mStop=new Track();
             let mTrainType=new TrainType();
             let mDia=new Diagram();
             let mStreak=new Streak();
@@ -484,8 +484,8 @@ export class DataSet {
                         }
                     }
                     if(property=="EkiTrack2") {
-                        mStop=new Stop();
-                        mStation.stops.push(mStop);
+                        mStop=new Track();
+                        mStation.tracks.push(mStop);
                     }
                     if(property=="Eki"){
                         mStation=new Station();
@@ -1322,17 +1322,13 @@ export class Station {
      * This parameter is not used in the conventional format (.oud) .
      * Used in a file of a different software format (.oud2) .
      *
-     * @type { {string, string}[] }
      */
-    private _lines: {
-        name: string
-        shortname: string
-    }[] = []
-    public get lines(): { name: string; shortname: string }[] {
-        return this._lines
+    private _tracks:Track[];
+    public get tracks(): Track[] {
+        return this._tracks
     }
-    public set lines(v: { name: string; shortname: string }[]) {
-        this._lines = v
+    public set tracks(v: Track[]) {
+        this._tracks = v
     }
     /**
      * 下り本線のindex
@@ -1531,12 +1527,12 @@ export class Station {
 }
 
 /**
- * A class of Stop in Station
+ * A class of Track in Station
  * Sometimes, this is called platform
  *
  * oudia2ndのEkiTrack2Contに対応
  */
-export class Stop{
+export class Track{
     /**
      * 番線名
      * stop name
@@ -1578,7 +1574,6 @@ export class Stop{
         }
     }
 }
-
 /**
  * A class constituting the train type included in this route.
  */
