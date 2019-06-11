@@ -166,11 +166,13 @@ class Time {
             this._h = Math.floor(time / 100);
             this._m = time % 100;
             this._s = 0;
+            this.isNull = false;
         }
         else if (5 <= v.length && v.length <= 6) {
             this._h = Math.floor(time / 10000);
             this._m = Math.floor((time % 10000) / 100);
             this._s = time % 100;
+            this.isNull = false;
         }
         this.normalize();
     }

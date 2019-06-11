@@ -21,7 +21,7 @@
                 var blob = new Blob([str], { "type": "application/x-msdownload" });
                 var download = document.getElementById("download");
                 download.href = window.URL.createObjectURL(blob);
-                download.download = this.lineName + ".aod";
+                download.download = data.name + ".json";
                 console.log("download");
                 download.click();
 
