@@ -269,9 +269,9 @@ export class Time {
     }
 }
 
-declare var EndpointWork: EndpointWork
+export declare var EndpointWork: EndpointWorkInterface
 
-interface EndpointWork {
+export interface EndpointWorkInterface {
     // new(
     //     worktype: number,
     //     track?: number,
@@ -1637,11 +1637,11 @@ export class StHandling {
         this._track = v
     }
 
-    private _endpointWork: EndpointWork = EndpointWork
-    public get endpointWork(): EndpointWork {
+    private _endpointWork: EndpointWorkInterface = EndpointWork
+    public get endpointWork(): EndpointWorkInterface {
         return this._endpointWork
     }
-    public set endpointWork(v: EndpointWork) {
+    public set endpointWork(v: EndpointWorkInterface) {
         this._endpointWork = v
     }
 
@@ -1651,28 +1651,3 @@ export class StHandling {
         this.departure = new Time()
     }
 }
-
-// var O_O = {
-//     OudOperator: OudOperator,
-//     Station: Station,
-//     TrainType: TrainType,
-//     Diagram: Diagram,
-//     Time: Time,
-//     Streak: Streak,
-//     StHandling: StHandling,
-//     DataSet: DataSet,
-//     EndpointWork: EndpointWork,
-// }
-// export default O_O
-
-// export {
-//     OudOperator,
-//     Station,
-//     TrainType,
-//     Diagram,
-//     Time,
-//     Streak,
-//     StHandling,
-//     DataSet,
-//     EndpointWork,
-// }
