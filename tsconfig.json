@@ -1,46 +1,52 @@
 {
-    "compilerOptions": {
-        /* Basic Options */
-        "target": "ESNEXT",
-        /* ｔｓを書くときにどのversionのESが対象か: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
-        "module": "commonjs",
-        /* どのversionのESを生成するか: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
-        // "outFile": "./dist/OudOperator.js",
-        /* 出力するファイル(ファイル出力はwebpackで行うので不要) */
-        "outDir": "./dist",
-        /* 出力するディレクトリ(ファイル出力はwebpackで行うので不要) */
-        "rootDir": "./src",
-        /* ビルド時のルートディレクトリ(ビルド対象のパス設定はwebpackで行うので不要) */
-        "noEmit": false,
-        /* ビルド時に型ファイルを生成しない(これがあるとts-loaderでエラーが出るので外しています */
+  "compilerOptions": {
+    // "lib": ["es2015", "dom"],
+    "declaration": true,
+    "removeComments": true,
+    /* コメントを出力しません。 */
 
-        /* Strict Type-Checking Options */
-        "strict": true,
-        /* すべての strict タイプ・オプション(noImplicitAny, strictNullChecks, noImplicitThis(thisの型チェック), alwaysStrict(strictモードのjs出力)) を 有効化する */
-        "noImplicitAny": true,
-        /* any型の使用不可 */
-        "strictNullChecks": false,
-        /* nullable型以外でnullを許容しない */
 
-        /* Additional Checks */
-        "noUnusedLocals": true,
-        /* 未使用の変数を許容しない */
-        "noUnusedParameters": true,
-        /* 未使用の変数を許容しない */
-        "noImplicitReturns": true,
-        /* メソッド内で返り値の型があっているかをチェック */
+    /* Basic Options */
+    "target": "ESNEXT",
+    /* ｔｓを書くときにどのversionのESが対象か: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
+    "module": "commonjs",
+    /* どのversionのESを生成するか: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
+    // "outFile": "./dist/OudOperator.js",
+    /* 出力するファイル(ファイル出力はwebpackで行うので不要) */
+    "outDir": "./define",
+    /* 出力するディレクトリ(ファイル出力はwebpackで行うので不要) */
+    "rootDir": "./src",
+    /* ビルド時のルートディレクトリ(ビルド対象のパス設定はwebpackで行うので不要) */
+    "noEmit": false,
+    /* ビルド時に型ファイルを生成しない(これがあるとts-loaderでエラーが出るので外しています */
 
-        /* Module Resolution Options */
-        "moduleResolution": "node",
-        /* http://js.studio-kingdom.com/typescript/handbook/module_resolution 参照 */
-        "esModuleInterop": true /* ESModuleと同じ動作をする. */
-    },
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "**/*.spec.ts"
-    ]
+    /* Strict Type-Checking Options */
+    "strict": true,
+    /* すべての strict タイプ・オプション(noImplicitAny, strictNullChecks, noImplicitThis(thisの型チェック), alwaysStrict(strictモードのjs出力)) を 有効化する */
+    "noImplicitAny": true,
+    /* any型の使用不可 */
+    "strictNullChecks": false,
+    /* nullable型以外でnullを許容しない */
+
+    /* Additional Checks */
+    "noUnusedLocals": true,
+    /* 未使用の変数を許容しない */
+    "noUnusedParameters": true,
+    /* 未使用の変数を許容しない */
+    "noImplicitReturns": true,
+    /* メソッド内で返り値の型があっているかをチェック */
+
+    /* Module Resolution Options */
+    "moduleResolution": "node",
+    /* http://js.studio-kingdom.com/typescript/handbook/module_resolution 参照 */
+    "esModuleInterop": true /* ESModuleと同じ動作をする. */
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
 
 }
