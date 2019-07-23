@@ -33,6 +33,7 @@ export interface EndpointWorkInterface {
 }
 export declare class DataSet {
     private _fileStruct;
+    private loadingStartTime;
     fileStruct: any;
     private _fileType;
     fileType: string;
@@ -52,7 +53,9 @@ export declare class DataSet {
     private static command;
     private static value;
     private static split;
+    fromOud2(lines: Array<string>): Promise<any>;
     fromOud(lines: Array<string>): Promise<any>;
+    setValue(command: string, value: string): void;
 }
 export declare class Station {
     private _name;
@@ -75,11 +78,8 @@ export declare class Station {
     shouldShowLineNumberUp: boolean;
     private _shouldShowLines;
     shouldShowLines: boolean;
-    private _lines;
-    lines: {
-        name: string;
-        shortname: string;
-    }[];
+    private _tracks;
+    tracks: Track[];
     private _mainLineDown;
     mainLineDown: number;
     private _mainLineUp;
@@ -89,6 +89,14 @@ export declare class Station {
     static scaleToInt(value: string): number;
     parseScale(): string;
     static trainInfoToInt(value: string): number;
+    setValue(command: string, value: string): void;
+}
+export declare class Track {
+    private _name;
+    name: string;
+    private _shortName;
+    shortName: string;
+    setValue(command: string, value: string): void;
 }
 export declare class TrainType {
     private _name;
@@ -109,6 +117,7 @@ export declare class TrainType {
     shoudDrawStopMark: boolean;
     constructor();
     static lineStyleToInt(str: string): number;
+    setValue(command: string, value: string): void;
 }
 export declare class Diagram {
     private _name;
@@ -117,6 +126,7 @@ export declare class Diagram {
     downStreaks: Array<Streak>;
     private _upStreaks;
     upStreaks: Array<Streak>;
+    setValue(command: string, value: string): void;
 }
 export declare class Streak {
     private _operationNum;
@@ -133,6 +143,7 @@ export declare class Streak {
     stHandlings: Array<StHandling>;
     private _comment;
     comment: string;
+    setValue(command: string, value: string): void;
 }
 export declare class StHandling {
     private _type;

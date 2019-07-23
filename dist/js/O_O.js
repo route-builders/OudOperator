@@ -249,10 +249,12 @@ function () {
         this._h = Math.floor(time / 100);
         this._m = time % 100;
         this._s = 0;
+        this.isNull = false;
       } else if (5 <= v.length && v.length <= 6) {
         this._h = Math.floor(time / 10000);
         this._m = Math.floor(time % 10000 / 100);
         this._s = time % 100;
+        this.isNull = false;
       }
 
       this.normalize();
@@ -339,6 +341,7 @@ function () {
   function DataSet() {
     _classCallCheck(this, DataSet);
 
+    this.loadingStartTime = 0;
     this._fileType = '';
     this._fileTypeAppComment = '';
     this._name = '';
@@ -356,11 +359,139 @@ function () {
   }
 
   _createClass(DataSet, [{
-    key: "fromOud",
-    value: function fromOud(lines) {
+    key: "fromOud2",
+    value: function fromOud2(lines) {
       var _this = this;
 
+      var starttime = new Date().getTime();
       return new Promise(function (resolve, _) {
+        var propertyStack = new Array();
+        var property = '';
+        var mStation = new Station();
+        var mStop = new Track();
+        var mTrainType = new TrainType();
+        var mDia = new Diagram();
+        var mStreak = new Streak();
+        var direct = 0;
+
+        for (var i = 0; i < lines.length; i++) {
+          if (lines[i] == '.') {
+            if (propertyStack.length == 0) {
+              break;
+            }
+
+            property = propertyStack.pop();
+            continue;
+          }
+
+          if (lines[i].endsWith('.')) {
+            propertyStack.push(property);
+            property = lines[i].substring(0, lines[i].length - 1);
+
+            if (property == 'Ressya') {
+              mStreak = new Streak();
+
+              switch (direct) {
+                case 10:
+                  mDia.downStreaks.push(mStreak);
+                  break;
+
+                case 20:
+                  mDia.upStreaks.push(mStreak);
+                  break;
+
+                default:
+              }
+            }
+
+            if (property == 'EkiTrack2') {
+              mStop = new Track();
+              mStation.tracks.push(mStop);
+            }
+
+            if (property == 'Eki') {
+              mStation = new Station();
+
+              _this.stations.push(mStation);
+            }
+
+            if (property == 'Ressyasyubetsu') {
+              mTrainType = new TrainType();
+
+              _this.trainTypes.push(mTrainType);
+            }
+
+            if (property == 'Dia') {
+              mDia = new Diagram();
+
+              _this.diagrams.push(mDia);
+            }
+
+            if (property == 'Kudari') {
+              direct = 10;
+            }
+
+            if (property == 'Nobori') {
+              direct = 20;
+            }
+
+            continue;
+          }
+
+          var command = DataSet.command(lines[i]);
+          var value = DataSet.value(lines[i]);
+
+          if (property == 'Ressya') {
+            mStreak.setValue(command, value);
+          }
+
+          if (property == 'EkiTrack2') {
+            mStop.setValue(command, value);
+          }
+
+          if (property == 'Eki') {
+            mStation.setValue(command, value);
+          }
+
+          if (property == 'Ressyasyubetsu') {
+            mTrainType.setValue(command, value);
+          }
+
+          if (property == 'Dia') {
+            mDia.setValue(command, value);
+          }
+
+          if (property == 'Rosen') {
+            _this.setValue(command, value);
+          }
+
+          if (property == 'DispProp') {
+            _this.setValue(command, value);
+          }
+
+          if (property == '') {
+            _this.setValue(command, value);
+          }
+        }
+
+        var endtime = new Date().getTime();
+        console.log('loading time=' + (endtime - starttime));
+        resolve();
+      }).then(function () {})["catch"](function (e) {
+        console.log(e);
+
+        if (e.fileName && e.lineNumber) {
+          console.log('ファイル:' + e.fileName + ', 行:' + e.lineNumber);
+        }
+      });
+    }
+  }, {
+    key: "fromOud",
+    value: function fromOud(lines) {
+      var _this2 = this;
+
+      return new Promise(function (resolve, _) {
+        _this2.loadingStartTime = new Date().getTime();
         var currentProp = '';
 
         for (var i = 0; i < lines.length; i++) {
@@ -418,50 +549,50 @@ function () {
 
               Dia.end = i;
 
-              _this.fileStruct.Dia.push(Dia);
+              _this2.fileStruct.Dia.push(Dia);
             } else {
-              _this.fileStruct[currentProp][_this.fileStruct[currentProp].length] = {
+              _this2.fileStruct[currentProp][_this2.fileStruct[currentProp].length] = {
                 start: i
               };
             }
           } else if (propEndMatch !== null) {
             if (currentProp == 'Dia') {
-              _this.fileStruct['Rosen'][_this.fileStruct['Rosen'].length - 1].end = i;
+              _this2.fileStruct['Rosen'][_this2.fileStruct['Rosen'].length - 1].end = i;
             } else {
-              _this.fileStruct[currentProp][_this.fileStruct[currentProp].length - 1].end = i;
+              _this2.fileStruct[currentProp][_this2.fileStruct[currentProp].length - 1].end = i;
             }
           }
         }
 
-        _this.fileStruct.Rosen.shift();
+        _this2.fileStruct.Rosen.shift();
 
-        _this.fileStruct.Eki.shift();
+        _this2.fileStruct.Eki.shift();
 
-        _this.fileStruct.Ressyasyubetsu.shift();
+        _this2.fileStruct.Ressyasyubetsu.shift();
 
-        _this.fileStruct.Dia.shift();
+        _this2.fileStruct.Dia.shift();
 
-        _this.fileStruct.DispProp.shift();
+        _this2.fileStruct.DispProp.shift();
 
-        _this.stations = new Array(_this.fileStruct.Eki.length);
-        _this.trainTypes = new Array(_this.fileStruct.Ressyasyubetsu.length);
-        _this.diagrams = new Array(_this.fileStruct.Dia.length);
+        _this2.stations = new Array(_this2.fileStruct.Eki.length);
+        _this2.trainTypes = new Array(_this2.fileStruct.Ressyasyubetsu.length);
+        _this2.diagrams = new Array(_this2.fileStruct.Dia.length);
         resolve();
       }).then(function () {
         Promise.all([new Promise(function (resolve, reject) {
           var fileTypeLine = DataSet.split(lines[0]);
 
           if (fileTypeLine[0] == 'FileType') {
-            _this.fileType = fileTypeLine[1];
+            _this2.fileType = fileTypeLine[1];
           } else {
             reject(1);
             return;
           }
 
-          var fileTypeAppCommentLine = DataSet.split(lines[_this.fileStruct.DispProp[_this.fileStruct.DispProp.length - 1].end + 1]);
+          var fileTypeAppCommentLine = DataSet.split(lines[_this2.fileStruct.DispProp[_this2.fileStruct.DispProp.length - 1].end + 1]);
 
           if (fileTypeAppCommentLine[0] == 'FileTypeAppComment') {
-            _this.fileTypeAppComment = fileTypeAppCommentLine[1];
+            _this2.fileTypeAppComment = fileTypeAppCommentLine[1];
           } else {
             reject(2);
             return;
@@ -476,7 +607,7 @@ function () {
               var i = _i;
               var st = new Station();
 
-              for (var j = _this.fileStruct.Eki[i].start; j < _this.fileStruct.Eki[i].end; j++) {
+              for (var j = _this2.fileStruct.Eki[i].start; j < _this2.fileStruct.Eki[i].end; j++) {
                 var lineArr = DataSet.split(lines[j]);
 
                 switch (lineArr[0]) {
@@ -506,13 +637,13 @@ function () {
                 }
               }
 
-              _this.stations[i] = st;
+              _this2.stations[i] = st;
 
               _resolve();
             }));
           };
 
-          for (var _i = 0; _i < _this.fileStruct.Eki.length; _i++) {
+          for (var _i = 0; _i < _this2.fileStruct.Eki.length; _i++) {
             _loop(_i);
           }
 
@@ -525,7 +656,7 @@ function () {
               var i = _i;
               var tr = new TrainType();
 
-              for (var j = _this.fileStruct.Ressyasyubetsu[i].start; j < _this.fileStruct.Ressyasyubetsu[i].end; j++) {
+              for (var j = _this2.fileStruct.Ressyasyubetsu[i].start; j < _this2.fileStruct.Ressyasyubetsu[i].end; j++) {
                 var lineArr = DataSet.split(lines[j]);
 
                 switch (lineArr[0]) {
@@ -567,13 +698,13 @@ function () {
                 }
               }
 
-              _this.trainTypes[i] = tr;
+              _this2.trainTypes[i] = tr;
 
               _resolve();
             }));
           };
 
-          for (var _i = 0; _i < _this.fileStruct.Ressyasyubetsu.length; _i++) {
+          for (var _i = 0; _i < _this2.fileStruct.Ressyasyubetsu.length; _i++) {
             _loop2(_i);
           }
 
@@ -585,8 +716,8 @@ function () {
             promises.push(new Promise(function (_resolve, _reject) {
               var i = _i;
               var dia = new Diagram();
-              dia.downStreaks = new Array(_this.fileStruct.Dia[i].Kudari.length);
-              dia.upStreaks = new Array(_this.fileStruct.Dia[i].Nobori.length);
+              dia.downStreaks = new Array(_this2.fileStruct.Dia[i].Kudari.length);
+              dia.upStreaks = new Array(_this2.fileStruct.Dia[i].Nobori.length);
               var diaPromises = [];
 
               var _loop4 = function _loop4(_j) {
@@ -594,7 +725,7 @@ function () {
                   var j = _j;
                   var st = new Streak();
 
-                  for (var k = _this.fileStruct.Dia[i].Kudari[j].start; k < _this.fileStruct.Dia[i].Kudari[j].end; k++) {
+                  for (var k = _this2.fileStruct.Dia[i].Kudari[j].start; k < _this2.fileStruct.Dia[i].Kudari[j].end; k++) {
                     var lineArr = DataSet.split(lines[k]);
 
                     switch (lineArr[0]) {
@@ -664,7 +795,7 @@ function () {
                 }));
               };
 
-              for (var _j = 0; _j < _this.fileStruct.Dia[i].Kudari.length; _j++) {
+              for (var _j = 0; _j < _this2.fileStruct.Dia[i].Kudari.length; _j++) {
                 _loop4(_j);
               }
 
@@ -673,7 +804,7 @@ function () {
                   var j = _j;
                   var st = new Streak();
 
-                  for (var k = _this.fileStruct.Dia[i].Nobori[j].start; k < _this.fileStruct.Dia[i].Nobori[j].end; k++) {
+                  for (var k = _this2.fileStruct.Dia[i].Nobori[j].start; k < _this2.fileStruct.Dia[i].Nobori[j].end; k++) {
                     var lineArr = DataSet.split(lines[k]);
 
                     switch (lineArr[0]) {
@@ -747,25 +878,129 @@ function () {
                 }));
               };
 
-              for (var _j = 0; _j < _this.fileStruct.Dia[i].Nobori.length; _j++) {
+              for (var _j = 0; _j < _this2.fileStruct.Dia[i].Nobori.length; _j++) {
                 _loop5(_j);
               }
 
-              _this.diagrams[i] = dia;
+              _this2.diagrams[i] = dia;
 
               _resolve();
             }));
           };
 
-          for (var _i = 0; _i < _this.fileStruct.Dia.length; _i++) {
+          for (var _i = 0; _i < _this2.fileStruct.Dia.length; _i++) {
             _loop3(_i);
           }
 
           Promise.all(promises).then(resolve);
-        })]).then(function () {})["catch"](function () {
+        })]).then(function () {
+          var endTime = new Date().getTime();
+          console.log('loading time:' + (endTime - _this2.loadingStartTime));
+        })["catch"](function () {
           return console.log('ERROR');
         });
       });
+    }
+  }, {
+    key: "setValue",
+    value: function setValue(command, value) {
+      switch (command) {
+        case 'FileType':
+          this.fileType = value;
+          break;
+
+        case 'FileTypeAppComment':
+          this.fileTypeAppComment = value;
+          break;
+
+        case 'Rosenmei':
+          this.name = value;
+          break;
+
+        case 'KudariDiaAlias':
+          break;
+
+        case 'NoboriDiaAlias':
+          break;
+
+        case 'KitenJikoku':
+          break;
+
+        case 'DiagramDgrYZahyouKyoriDefault':
+          break;
+
+        case 'Comment':
+          break;
+
+        case 'JikokuhyouFont':
+          break;
+
+        case 'JikokuhyouVFont':
+          break;
+
+        case 'DiaEkimeiFont':
+          break;
+
+        case 'DiaJikokuFont':
+          break;
+
+        case 'DiaRessyaFont':
+          break;
+
+        case 'CommentFont':
+          break;
+
+        case 'DiaMojiColor':
+          break;
+
+        case 'DiaHaikeiColor':
+          break;
+
+        case 'DiaRessyaColor':
+          break;
+
+        case 'DiaJikuColor':
+          break;
+
+        case 'JikokuhyouBackColor':
+          break;
+
+        case 'StdOpeTimeLowerColor':
+          break;
+
+        case 'StdOpeTimeHigherColor':
+          break;
+
+        case 'StdOpeTimeUndefColor':
+          break;
+
+        case 'StdOpeTimeIllegalColor':
+          break;
+
+        case 'EkimeiLength':
+          break;
+
+        case 'JikokuhyouRessyaWidth':
+          break;
+
+        case 'AnySecondIncDec1':
+          break;
+
+        case 'AnySecondIncDec2':
+          break;
+
+        case 'DisplayRessyamei':
+          break;
+
+        case 'DisplayOuterTerminalEkimeiOriginSide':
+          break;
+
+        case 'DisplayOuterTerminalEkimeiTerminalSide':
+          break;
+
+        case 'DiagramDisplayOuterTerminal':
+          break;
+      }
     }
   }, {
     key: "fileStruct",
@@ -869,7 +1104,7 @@ function () {
     this._shouldShowLineNumberDown = false;
     this._shouldShowLineNumberUp = false;
     this._shouldShowLines = false;
-    this._lines = [];
+    this._tracks = new Array();
     this._mainLineDown = 0;
     this._mainLineUp = 0;
   }
@@ -900,6 +1135,60 @@ function () {
 
         default:
           return 'Ekikibo_Ippan';
+      }
+    }
+  }, {
+    key: "setValue",
+    value: function setValue(command, value) {
+      switch (command) {
+        case 'Ekimei':
+          this.name = value;
+          break;
+
+        case 'Ekijikokukeisiki':
+          this.timeType = Station.timeTypeToInt(value);
+          break;
+
+        case 'Ekikibo':
+          this.scale = Station.scaleToInt(value);
+          break;
+
+        case 'DiagramRessyajouhouHyoujiKudari':
+          this.trainInfoDown = Station.trainInfoToInt(value);
+          break;
+
+        case 'DiagramRessyajouhouHyoujiNobori':
+          this.trainInfoUp = Station.trainInfoToInt(value);
+          break;
+
+        case 'DownMain':
+          this.mainLineDown = parseInt(value);
+          break;
+
+        case 'UpMain':
+          this.mainLineUp = parseInt(value);
+          break;
+
+        case 'LoopOriginEkiIndex':
+          break;
+
+        case 'BrunchCoreEkiIndex':
+          break;
+
+        case 'JikokuhyouTrackDisplayKudari':
+          this.shouldShowLineNumberDown = value == '1';
+          break;
+
+        case 'JikokuhyouTrackDisplayNobori':
+          this.shouldShowLineNumberUp = value == '1';
+          break;
+
+        case 'DiagramTrackDisplay':
+          this.shouldShowLines = value == '1';
+          break;
+
+        case 'NextEkiDistance':
+          break;
       }
     }
   }, {
@@ -983,12 +1272,12 @@ function () {
       this._shouldShowLines = v;
     }
   }, {
-    key: "lines",
+    key: "tracks",
     get: function get() {
-      return this._lines;
+      return this._tracks;
     },
     set: function set(v) {
-      this._lines = v;
+      this._tracks = v;
     }
   }, {
     key: "mainLineDown",
@@ -1054,6 +1343,49 @@ function () {
 }();
 
 exports.Station = Station;
+
+var Track =
+/*#__PURE__*/
+function () {
+  function Track() {
+    _classCallCheck(this, Track);
+  }
+
+  _createClass(Track, [{
+    key: "setValue",
+    value: function setValue(command, value) {
+      switch (command) {
+        case 'TrackName':
+          this.name = value;
+          break;
+
+        case 'TrackRyakusyou':
+          this.shortName = value;
+          break;
+      }
+    }
+  }, {
+    key: "name",
+    get: function get() {
+      return this._name;
+    },
+    set: function set(v) {
+      this._name = v;
+    }
+  }, {
+    key: "shortName",
+    get: function get() {
+      return this._shortName;
+    },
+    set: function set(v) {
+      this._shortName = v;
+    }
+  }]);
+
+  return Track;
+}();
+
+exports.Track = Track;
 
 var TrainType =
 /*#__PURE__*/
@@ -1137,7 +1469,55 @@ function () {
     this._shoudDrawStopMark = false;
   }
 
-  _createClass(TrainType, null, [{
+  _createClass(TrainType, [{
+    key: "setValue",
+    value: function setValue(command, value) {
+      switch (command) {
+        case 'Syubetsumei':
+          this.name = value;
+          break;
+
+        case 'Ryakusyou':
+          this.shortname = value;
+          break;
+
+        case 'JikokuhyouMojiColor':
+          this.trainColor.setFromABGR(value);
+          break;
+
+        case 'JikokuhyouFontIndex':
+          this.fontIdx = parseInt(value);
+          break;
+
+        case 'JikokuhyouBackColor':
+          break;
+
+        case 'DiagramSenColor':
+          this.lineColor.setFromABGR(value);
+          break;
+
+        case 'DiagramSenStyle':
+          this.lineType = TrainType.lineStyleToInt(value);
+          break;
+
+        case 'DiagramSenIsBold':
+          if (value == '1') {
+            this.lineWeight = 2;
+          } else {
+            this.lineWeight = 0;
+          }
+
+          break;
+
+        case 'StopMarkDrawType':
+          this.shoudDrawStopMark = value == 'EStopMarkDrawType_DrawOnStop';
+          break;
+
+        case 'ParentSyubetsuIndex':
+          break;
+      }
+    }
+  }], [{
     key: "lineStyleToInt",
     value: function lineStyleToInt(str) {
       switch (str) {
@@ -1170,6 +1550,24 @@ function () {
   }
 
   _createClass(Diagram, [{
+    key: "setValue",
+    value: function setValue(command, value) {
+      switch (command) {
+        case 'DiaName':
+          this.name = value;
+          break;
+
+        case 'MainBackColorIndex':
+          break;
+
+        case 'SubBackColorIndex':
+          break;
+
+        case 'BackPatternIndex':
+          break;
+      }
+    }
+  }, {
     key: "name",
     get: function get() {
       return this._name;
@@ -1215,6 +1613,106 @@ function () {
   }
 
   _createClass(Streak, [{
+    key: "setValue",
+    value: function setValue(command, value) {
+      switch (command) {
+        case 'Syubetsu':
+          this.typeIdx = parseInt(value);
+          break;
+
+        case 'Ressyabangou':
+          this.operationNum = value;
+          break;
+
+        case 'Ressyamei':
+          this.name = value;
+          break;
+
+        case 'Gousuu':
+          this.no = value;
+          break;
+
+        case 'EkiJikoku':
+          var timeList = value.split(',');
+
+          for (var i = 0; i < timeList.length; i++) {
+            var mStHanding = new StHandling();
+            this.stHandlings.push(mStHanding);
+
+            if (timeList[i].indexOf(';') != -1) {
+              mStHanding.type = parseInt(timeList[i].split(';')[0]);
+              var mTimeList = timeList[i].split(';')[1].split('/');
+
+              if (mTimeList.length == 2) {
+                mStHanding.arrival.setTime(mTimeList[0]);
+
+                if (mTimeList[1].length != 0) {
+                  mStHanding.departure.setTime(mTimeList[1]);
+                }
+              } else {
+                mStHanding.departure.setTime(mTimeList[0]);
+              }
+            } else {
+              mStHanding.type = parseInt(timeList[i]);
+            }
+          }
+
+          break;
+
+        case 'RessyaTrack':
+          var trackList = value.split(',');
+
+          for (var _i2 = 0; _i2 < trackList.length; _i2++) {
+            if (trackList[_i2].length == 0) {
+              continue;
+            }
+
+            var _mStHanding = this.stHandlings[_i2];
+
+            var a = trackList[_i2].split(';');
+
+            _mStHanding.track = parseInt(a[0]);
+
+            if (a.length >= 2) {
+              var b = a[1].split('/');
+
+              switch (b[0]) {
+                case '0':
+                  break;
+
+                case '1':
+                  _mStHanding.endpointWork.worktype = 10;
+                  _mStHanding.endpointWork.track = parseInt(b[1].split('$')[0]);
+
+                  _mStHanding.endpointWork.arrival.setTime(b[1].split('$')[1]);
+
+                  _mStHanding.endpointWork.departure.setTime(b[2]);
+
+                  break;
+
+                case '2':
+                  _mStHanding.endpointWork.worktype = 20;
+                  _mStHanding.endpointWork.operationNum = b[1];
+                  break;
+
+                case '3':
+                  _mStHanding.endpointWork.worktype = 30;
+                  b[1].split('$')[0];
+                  b[1].split('$')[1];
+                  _mStHanding.endpointWork.operationNum = b[2];
+                  break;
+              }
+            }
+          }
+
+          break;
+
+        case 'Bikou':
+          this, command = value;
+          break;
+      }
+    }
+  }, {
     key: "operationNum",
     get: function get() {
       return this._operationNum;

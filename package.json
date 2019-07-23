@@ -5,6 +5,7 @@
   "main": "./dist/js/O_O.min.js",
   "types": "./define/index.d.ts",
   "scripts": {
+    "prepublish": "$(npm bin)/webpack",
     "build": "webpack",
     "watch": "webpack-dev-server",
     "check": "yarn run tsc --noEmit && yarn run tslint",
