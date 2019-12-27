@@ -4,6 +4,9 @@
   "description": "The library to use the string read from OuDia file",
   "main": "./dist/js/O_O.min.js",
   "types": "./define/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "prepublish": "$(npm bin)/webpack",
     "build": "webpack",
