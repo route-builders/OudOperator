@@ -15,7 +15,7 @@
  * Released under the GNU General Public License.
  *
  * @author up-tri
- * @version 1.0
+ * @version 1.3.0
  */
 
 /**
@@ -152,120 +152,66 @@ export class Time {
      *
      * @type {boolean}
      */
-    public isNull: boolean = true
+    public get isNull(): boolean {
+        return this.seconds < 0
+    }
     /**
-     * hour(s) (0 ~ 23)
-     *
-     * @type {number}
+     * The number represented seconds since midnight.
+     * If it stores `-1`, means `null`.
      */
-    private _h: number = 0
-    /**
-     * minute(s) (0 ~ 59)
-     *
-     * @type {number}
-     */
-    private _m: number = 0
-    /**
-     * second(s) (0 ~ 59)
-     *
-     * @type {number}
-     */
-    private _s: number = 0
+    private seconds: number = 0
 
     constructor(v?: string | null) {
         if (v === undefined || v === null) {
-            this.isNull = true
-            this._h = 0
-            this._m = 0
-            this._s = 0
+            this.seconds = -1
             return
         }
         this.setTime(v)
     }
 
-    public setTime(v: string) {
-        if (v.match(/^[0-9]{3,6}$/) === null) {
-            this._h = 0
-            this._m = 0
-            this._s = 0
+    public getTime(): number {
+        return this.seconds
+    }
+
+    public setTime(v: string | null) {
+        if (v === null || v.match(/^[0-9]{3,6}$/) === null) {
+            this.seconds = -1
             return
         }
         let time = parseInt(v)
         if (3 <= v.length && v.length <= 4) {
-            this._h = Math.floor(time / 100)
-            this._m = time % 100
-            this._s = 0
+            this.seconds = Math.floor(time / 100) * 3600 + (time % 100) * 60
         } else if (5 <= v.length && v.length <= 6) {
-            this._h = Math.floor(time / 10000)
-            this._m = Math.floor((time % 10000) / 100)
-            this._s = time % 100
+            this.seconds =
+                Math.floor(time / 10000) * 3600 +
+                Math.floor((time % 10000) / 100) * 60 +
+                (time % 100)
         }
-        this.normalize()
-    }
-
-    private __slice(v: number): string {
-        return ('00' + v).slice(-2)
-    }
-
-    public get h(): string | undefined {
-        if (this.isNull) {
-            return undefined
-        }
-        return this.__slice(this._h)
-    }
-    public set h(v: string | undefined) {
-        if (typeof v !== undefined) {
-            this._h = 0
-        }
-        let parseV = parseInt(v)
-        this._h = parseV === NaN ? 0 : parseV
-    }
-
-    public get m(): string {
-        if (this.isNull) {
-            return undefined
-        }
-        return this.__slice(this._h)
-    }
-    public set m(v: string) {
-        let parseV = parseInt(v)
-        this._m = parseV === NaN ? 0 : parseV
-    }
-
-    public get s(): string {
-        if (this.isNull) {
-            return undefined
-        }
-        return this.__slice(this._h)
-    }
-    public set s(v: string) {
-        let parseV = parseInt(v)
-        this._s = parseV === NaN ? 0 : parseV
-    }
-
-    /**
-     * @private
-     * A method to normalize numerical value of hour, minute, second.
-     */
-    private normalize() {
-        this._m += Math.floor(this._s / 60)
-        this._h += Math.floor(this._m / 60)
-        this._s %= 60
-        this._m %= 60
-        this._h %= 24
     }
     /**
-     * A method for getting a string representing time.
+     * The method to compare large/small with the another `Time` instance.
+     * @param {Time} time The `Time` instance to compare
      *
-     * @param {boolean} withCoron Whether to add a coron to the string
-     * @param {boolean} withSecond Whether to include seconds.
+     * @return {integer}
      */
-    public str(withCoron: boolean = true, withSecond: boolean = true): string {
-        if (withCoron) {
-            return this.h + ':' + this.m + (withSecond ? ':' + this.s : '')
+    public compareWith(time: Time): number {
+        const difference = this.seconds - time.seconds
+        if (difference < 0) {
+            return -1
+        } else if (difference == 0) {
+            return 0
         } else {
-            return this.h + this.m + (withSecond ? this.s : '')
+            return 1
         }
+    }
+    /**
+     * The method to get the difference to the another `Time` instance.
+     * @param {Time} time The `Time` instance to compare
+     *
+     * @return {integer} difference
+     */
+    public differenceTo(time: Time): Time {
+        return new Time(((this.seconds - time.seconds) | 0).toString())
     }
 }
 
@@ -743,8 +689,9 @@ export class DataSet {
                                                                         arrAndDep[1] ===
                                                                         undefined
                                                                     ) {
-                                                                        sth.arrival.isNull = true
-                                                                        sth.departure.isNull = false
+                                                                        sth.arrival.setTime(
+                                                                            null
+                                                                        )
                                                                         sth.departure.setTime(
                                                                             arrAndDep[0]
                                                                         )
@@ -752,17 +699,16 @@ export class DataSet {
                                                                         arrAndDep[1] ===
                                                                         ''
                                                                     ) {
-                                                                        sth.arrival.isNull = false
                                                                         sth.arrival.setTime(
                                                                             arrAndDep[0]
                                                                         )
-                                                                        sth.departure.isNull = true
+                                                                        sth.departure.setTime(
+                                                                            null
+                                                                        )
                                                                     } else {
-                                                                        sth.departure.isNull = false
                                                                         sth.departure.setTime(
                                                                             arrAndDep[0]
                                                                         )
-                                                                        sth.arrival.isNull = false
                                                                         sth.arrival.setTime(
                                                                             arrAndDep[1]
                                                                         )
@@ -860,7 +806,9 @@ export class DataSet {
                                                                         arrAndDep[1] ===
                                                                         undefined
                                                                     ) {
-                                                                        arrival.isNull = true
+                                                                        arrival.setTime(
+                                                                            null
+                                                                        )
                                                                         departure.setTime(
                                                                             arrAndDep[0]
                                                                         )
@@ -871,7 +819,9 @@ export class DataSet {
                                                                         arrival.setTime(
                                                                             arrAndDep[0]
                                                                         )
-                                                                        departure.isNull = true
+                                                                        departure.setTime(
+                                                                            null
+                                                                        )
                                                                     } else {
                                                                         departure.setTime(
                                                                             arrAndDep[0]
@@ -881,8 +831,12 @@ export class DataSet {
                                                                         )
                                                                     }
                                                                 } else {
-                                                                    arrival.isNull = true
-                                                                    departure.isNull = true
+                                                                    arrival.setTime(
+                                                                        null
+                                                                    )
+                                                                    departure.setTime(
+                                                                        null
+                                                                    )
                                                                 }
                                                                 sth.arrival = arrival
                                                                 sth.departure = departure
