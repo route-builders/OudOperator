@@ -1,6 +1,6 @@
 {
-  "name": "oudoperator",
-  "version": "1.1.0",
+  "name": "@netgram/oud-operator",
+  "version": "1.2.0",
   "description": "The library to use the string read from OuDia file",
   "main": "./dist/js/O_O.min.js",
   "types": "./define/index.d.ts",

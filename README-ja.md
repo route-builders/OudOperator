@@ -15,13 +15,13 @@ take-okm 氏によって開発されています。
 
 1.  npm / yarn コマンドでプロジェクトへインストールします。
 
-    -   `npm i oudoperator`
-    -   `yarn add oudoperator`
+    -   `npm i @netgram/oud-operator`
+    -   `yarn add @netgram/oud-operator`
 
 2.  プロジェクト内で読みこみます。
 
     ```js
-    import O_O from 'oudoperator'
+    import O_O from '@netgram/oud-operator'
 
     const dataSet = new O_O.Dataset()
     dataSet.fromOud(someLines)

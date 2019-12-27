@@ -20,13 +20,13 @@ The library to use the string read from OuDia file.
 
 1.  install on your project.
 
-    -   `npm i oudoperator`
-    -   `yarn add oudoperator`
+    -   `npm i @netgram/oud-operator`
+    -   `yarn add @netgram/oud-operator`
 
 2.  Load module.
 
     ```js
-    import O_O from 'oudoperator'
+    import O_O from '@netgram/oud-operator'
 
     const dataSet = new O_O.Dataset()
     dataSet.fromOud(someLines)
