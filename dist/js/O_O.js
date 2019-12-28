@@ -108,31 +108,6 @@ module.exports = __webpack_require__(1);
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var OudOperator_1 = __webpack_require__(2);
-
-var O_O = {
-  Station: OudOperator_1.Station,
-  TrainType: OudOperator_1.TrainType,
-  Diagram: OudOperator_1.Diagram,
-  Time: OudOperator_1.Time,
-  Streak: OudOperator_1.Streak,
-  StHandling: OudOperator_1.StHandling,
-  DataSet: OudOperator_1.DataSet,
-  EndpointWork: OudOperator_1.EndpointWork
-};
-exports["default"] = O_O;
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
