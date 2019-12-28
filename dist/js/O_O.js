@@ -133,8 +133,6 @@ exports["default"] = O_O;
 "use strict";
 
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -217,16 +215,10 @@ function () {
   function Time(v) {
     _classCallCheck(this, Time);
 
-    this.isNull = true;
-    this._h = 0;
-    this._m = 0;
-    this._s = 0;
+    this.seconds = 0;
 
     if (v === undefined || v === null) {
-      this.isNull = true;
-      this._h = 0;
-      this._m = 0;
-      this._s = 0;
+      this.seconds = -1;
       return;
     }
 
@@ -234,97 +226,48 @@ function () {
   }
 
   _createClass(Time, [{
+    key: "getTime",
+    value: function getTime() {
+      return this.seconds;
+    }
+  }, {
     key: "setTime",
     value: function setTime(v) {
-      if (v.match(/^[0-9]{3,6}$/) === null) {
-        this._h = 0;
-        this._m = 0;
-        this._s = 0;
+      if (v === null || v.match(/^[0-9]{3,6}$/) === null) {
+        this.seconds = -1;
         return;
       }
 
       var time = parseInt(v);
 
       if (3 <= v.length && v.length <= 4) {
-        this._h = Math.floor(time / 100);
-        this._m = time % 100;
-        this._s = 0;
+        this.seconds = Math.floor(time / 100) * 3600 + time % 100 * 60;
       } else if (5 <= v.length && v.length <= 6) {
-        this._h = Math.floor(time / 10000);
-        this._m = Math.floor(time % 10000 / 100);
-        this._s = time % 100;
+        this.seconds = Math.floor(time / 10000) * 3600 + Math.floor(time % 10000 / 100) * 60 + time % 100;
       }
+    }
+  }, {
+    key: "compareWith",
+    value: function compareWith(time) {
+      var difference = this.seconds - time.seconds;
 
-      this.normalize();
-    }
-  }, {
-    key: "__slice",
-    value: function __slice(v) {
-      return ('00' + v).slice(-2);
-    }
-  }, {
-    key: "normalize",
-    value: function normalize() {
-      this._m += Math.floor(this._s / 60);
-      this._h += Math.floor(this._m / 60);
-      this._s %= 60;
-      this._m %= 60;
-      this._h %= 24;
-    }
-  }, {
-    key: "str",
-    value: function str() {
-      var withCoron = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-      var withSecond = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
-      if (withCoron) {
-        return this.h + ':' + this.m + (withSecond ? ':' + this.s : '');
+      if (difference < 0) {
+        return -1;
+      } else if (difference == 0) {
+        return 0;
       } else {
-        return this.h + this.m + (withSecond ? this.s : '');
+        return 1;
       }
     }
   }, {
-    key: "h",
-    get: function get() {
-      if (this.isNull) {
-        return undefined;
-      }
-
-      return this.__slice(this._h);
-    },
-    set: function set(v) {
-      if (_typeof(v) !== undefined) {
-        this._h = 0;
-      }
-
-      var parseV = parseInt(v);
-      this._h = parseV === NaN ? 0 : parseV;
+    key: "differenceTo",
+    value: function differenceTo(time) {
+      return new Time((this.seconds - time.seconds | 0).toString());
     }
   }, {
-    key: "m",
+    key: "isNull",
     get: function get() {
-      if (this.isNull) {
-        return undefined;
-      }
-
-      return this.__slice(this._h);
-    },
-    set: function set(v) {
-      var parseV = parseInt(v);
-      this._m = parseV === NaN ? 0 : parseV;
-    }
-  }, {
-    key: "s",
-    get: function get() {
-      if (this.isNull) {
-        return undefined;
-      }
-
-      return this.__slice(this._h);
-    },
-    set: function set(v) {
-      var parseV = parseInt(v);
-      this._s = parseV === NaN ? 0 : parseV;
+      return this.seconds < 0;
     }
   }]);
 
@@ -630,17 +573,13 @@ function () {
                               var arrAndDep = homeAndTimes[1].split('/');
 
                               if (arrAndDep[1] === undefined) {
-                                sth.arrival.isNull = true;
-                                sth.departure.isNull = false;
+                                sth.arrival.setTime(null);
                                 sth.departure.setTime(arrAndDep[0]);
                               } else if (arrAndDep[1] === '') {
-                                sth.arrival.isNull = false;
                                 sth.arrival.setTime(arrAndDep[0]);
-                                sth.departure.isNull = true;
+                                sth.departure.setTime(null);
                               } else {
-                                sth.departure.isNull = false;
                                 sth.departure.setTime(arrAndDep[0]);
-                                sth.arrival.isNull = false;
                                 sth.arrival.setTime(arrAndDep[1]);
                               }
                             }
@@ -711,18 +650,18 @@ function () {
                               var arrAndDep = homeAndTimes[1].split('/');
 
                               if (arrAndDep[1] === undefined) {
-                                arrival.isNull = true;
+                                arrival.setTime(null);
                                 departure.setTime(arrAndDep[0]);
                               } else if (arrAndDep[1] === '') {
                                 arrival.setTime(arrAndDep[0]);
-                                departure.isNull = true;
+                                departure.setTime(null);
                               } else {
                                 departure.setTime(arrAndDep[0]);
                                 arrival.setTime(arrAndDep[1]);
                               }
                             } else {
-                              arrival.isNull = true;
-                              departure.isNull = true;
+                              arrival.setTime(null);
+                              departure.setTime(null);
                             }
 
                             sth.arrival = arrival;

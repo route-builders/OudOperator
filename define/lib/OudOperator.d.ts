@@ -10,18 +10,13 @@ export declare class Color {
     BGR(withSharp?: boolean): string;
 }
 export declare class Time {
-    isNull: boolean;
-    private _h;
-    private _m;
-    private _s;
+    readonly isNull: boolean;
+    private seconds;
     constructor(v?: string | null);
-    setTime(v: string): void;
-    private __slice;
-    h: string | undefined;
-    m: string;
-    s: string;
-    private normalize;
-    str(withCoron?: boolean, withSecond?: boolean): string;
+    getTime(): number;
+    setTime(v: string | null): void;
+    compareWith(time: Time): number;
+    differenceTo(time: Time): Time;
 }
 export declare var EndpointWork: EndpointWorkInterface;
 export interface EndpointWorkInterface {
