@@ -118,7 +118,7 @@ export class O_O {
    * @param {Array<string>} lines rows array of OuDia file
    * @return {Promise<any>} file struct object or null
    */
-  public fromOud(lines: Array<string>): DataSet {
+  public fromOud(lines: Array<string>): O_O {
     const parser = new Oud2JSON(lines);
     const json = JSON.parse(parser.parse());
     const root = json['Rosen'][0];

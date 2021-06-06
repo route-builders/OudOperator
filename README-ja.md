@@ -21,7 +21,7 @@ take-okm 氏によって開発されています。
 2.  プロジェクト内で読みこみます。
 
     ```js
-    import O_O from '@route-builders/oud-operator';
+    import { O_O } from '@route-builders/oud-operator';
 
     import * as Encoder from 'encoding-japanese';
     import { readFileSync, writeFileSync } from 'fs';

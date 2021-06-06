@@ -26,7 +26,7 @@ The library to use the string read from OuDia file.
 2.  Load module.
 
     ```js
-    import O_O from '@route-builders/oud-operator';
+    import { O_O } from '@route-builders/oud-operator';
 
     import * as Encoder from 'encoding-japanese';
     import { readFileSync, writeFileSync } from 'fs';
