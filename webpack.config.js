@@ -1,38 +1,45 @@
-const path = require('path')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
-module.exports = [{
-    entry: {
-        "O_O": ['./src/index.ts'],
-        "O_O.min": ['./src/index.ts'],
+/** @type import('webpack').Configuration */
+module.exports = {
+  mode: 'production',
+  entry: './src/index.ts',
+  output: {
+    path: `${__dirname}/dist`,
+    filename: "O_O.js",
+    library: {
+      type: "umd"
     },
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'js/[name].js',
-        umdNamedDefine: true,
-        library: "O_O",
-        libraryTarget: "umd",
-        libraryExport: 'default',
-    },
-    module: {
-        rules: [{
-            test: /\.ts?$/,
-            exclude: /node_modules/,
-            use: [{
-                    loader: 'babel-loader'
-                },
-                {
-                    loader: 'ts-loader'
-                }
-            ]
-        }],
-    },
-    optimization: {
-        minimizer: [new UglifyJsPlugin({
-            include: /\.min\.js$/,
-        })],
-    },
-    resolve: {
-        extensions: ['.js', '.ts'],
-    },
-}, ]
+    globalObject: "this"
+  },
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: "tsconfig.json",
+              // configFile: "webpack.tsconfig.json",
+            }
+          },
+          // {
+          //   loader: 'babel-loader'
+          // },
+        ],
+      },
+      // {
+      //   test: /\.js$/,
+      //   use: [
+      //     {
+      //       loader: 'babel-loader'
+      //     },
+      //   ],
+      // },
+    ],
+  },
+  resolve: {
+    extensions: [
+      '.ts', ".js",
+    ],
+  },
+};
