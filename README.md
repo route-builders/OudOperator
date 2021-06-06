@@ -8,9 +8,9 @@ Hi> \(O_O)/
 
 The library to use the string read from OuDia file.
 
--   About OuDia
-    The software for editing and displaying railroad diagrams.
-    made by take-okm.
+- About OuDia
+  The software for editing and displaying railroad diagrams.
+  made by take-okm.
 
 [OuDia](http://take-okm.a.la9.jp/oudia/)
 
@@ -20,43 +20,48 @@ The library to use the string read from OuDia file.
 
 1.  install on your project.
 
-    -   `npm i @netgram/oud-operator`
-    -   `yarn add @netgram/oud-operator`
+    - `npm i @netgram/oud-operator`
+    - `yarn add @netgram/oud-operator`
 
 2.  Load module.
 
     ```js
-    import O_O from '@netgram/oud-operator'
+    import O_O from '@route-builders/oud-operator';
 
-    const dataSet = new O_O.Dataset()
-    dataSet.fromOud(someLines)
+    import * as Encoder from 'encoding-japanese';
+    import { readFileSync, writeFileSync } from 'fs';
+
+    const dataSet = new O_O();
+    const filepath = '/path/to/file.oud';
+    const buffer = readFileSync(filepath);
+
+    const encoding = Encoder.detect(buffer, ['SJIS', 'UTF8']);
+    if (!encoding) {
+      throw new Error();
+    }
+
+    const sources = Encoder.convert(buffer, {
+      to: 'UNICODE',
+      from: encoding,
+      type: 'string',
+      bom: false,
+    })
+      .replace(/\r/g, '')
+      .split('\n');
+
+    writeFileSync('demo.json', JSON.stringify(dataSet.fromOud(sources).toJSON()));
     ```
 
 ### Browser
 
-```html
-<!DOCTYPE html>
-<html lang="ja">
-    <head>
-        <meta charset="UTF-8" />
-        <title>O_O</title>
-    </head>
-    <body>
-        <script src="/path/to/O_O.min.js"></script>
-        <script>
-            const dataSet = new O_O.Dataset()
-            dataSet.fromOud(someLines)
-        </script>
-    </body>
-</html>
-```
+wip
 
 ## Notice
 
-This library relies on the window object. So it will not run in a command line environment.
+~~This library relies on the window object. So it will not run in a command line environment.~~
 
 ## Author
 
-Copyright &copy; 2018-2019 [up-tri](https://github.com/up-tri/)
+Copyright &copy; 2018-2021 [up-tri](https://github.com/up-tri/)
 
-Released under the GNU General Public License.
+under the MIT License.
