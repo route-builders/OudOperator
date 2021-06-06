@@ -1,52 +1,48 @@
 {
   "compilerOptions": {
-    // "lib": ["es2015", "dom"],
-    "declaration": true,
-    "removeComments": true,
-    /* コメントを出力しません。 */
-
-
-    /* Basic Options */
-    "target": "ESNEXT",
-    /* ｔｓを書くときにどのversionのESが対象か: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
+    "target": "es5",
     "module": "commonjs",
-    /* どのversionのESを生成するか: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
-    // "outFile": "./dist/OudOperator.js",
-    /* 出力するファイル(ファイル出力はwebpackで行うので不要) */
-    "outDir": "./define",
-    /* 出力するディレクトリ(ファイル出力はwebpackで行うので不要) */
-    "rootDir": "./src",
-    /* ビルド時のルートディレクトリ(ビルド対象のパス設定はwebpackで行うので不要) */
+    "lib": ["ES2018"],
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "composite": true,
+    "removeComments": true,
     "noEmit": false,
-    /* ビルド時に型ファイルを生成しない(これがあるとts-loaderでエラーが出るので外しています */
+    "isolatedModules": true,
 
-    /* Strict Type-Checking Options */
     "strict": true,
-    /* すべての strict タイプ・オプション(noImplicitAny, strictNullChecks, noImplicitThis(thisの型チェック), alwaysStrict(strictモードのjs出力)) を 有効化する */
     "noImplicitAny": true,
-    /* any型の使用不可 */
-    "strictNullChecks": false,
-    /* nullable型以外でnullを許容しない */
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
 
-    /* Additional Checks */
     "noUnusedLocals": true,
-    /* 未使用の変数を許容しない */
     "noUnusedParameters": true,
-    /* 未使用の変数を許容しない */
     "noImplicitReturns": true,
-    /* メソッド内で返り値の型があっているかをチェック */
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
 
-    /* Module Resolution Options */
+    "resolveJsonModule": true,
     "moduleResolution": "node",
-    /* http://js.studio-kingdom.com/typescript/handbook/module_resolution 参照 */
-    "esModuleInterop": true /* ESModuleと同じ動作をする. */
+    "rootDir": "src",
+    "baseUrl": "./",
+    "types": ["node", "jest"],
+    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": true,
+    "inlineSourceMap": false,
+    "inlineSources": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
   ]
-
 }
