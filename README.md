@@ -20,8 +20,8 @@ The library to use the string read from OuDia file.
 
 1.  install on your project.
 
-    - `npm i @netgram/oud-operator`
-    - `yarn add @netgram/oud-operator`
+    - `npm i @route-builders/oud-operator`
+    - `yarn add @route-builders/oud-operator`
 
 2.  Load module.
 
