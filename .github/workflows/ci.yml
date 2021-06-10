@@ -23,8 +23,9 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: 'dist'
-          destination-github-username: 'clonebot'
-          destination-repository-name: 'master'
+          destination-github-username: 'route-builders'
+          destination-repository-name: 'oud-operator-dist'
           user-email: yaki-shake@up-tri.me
+          user-name: clonebot
           commit-message: See ORIGIN_COMMIT from $GITHUB_REF
           target-branch: master
