@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: install & build
+        run: npm i && npm run prepare
+      - name: Pushes to dist repository
+        id: push_directory
+        uses: cpina/github-action-push-to-another-repository@master
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: 'dist'
+          destination-github-username: 'clonebot'
+          destination-repository-name: 'master'
+          user-email: yaki-shake@up-tri.me
+          commit-message: See ORIGIN_COMMIT from $GITHUB_REF
+          target-branch: master
