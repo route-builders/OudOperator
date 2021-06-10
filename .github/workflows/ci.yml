@@ -26,6 +26,6 @@ jobs:
           destination-github-username: 'route-builders'
           destination-repository-name: 'oud-operator-dist'
           user-email: yaki-shake@up-tri.me
-          user-name: clonebot
+          user-name: up-tri
           commit-message: See ORIGIN_COMMIT from $GITHUB_REF
           target-branch: master
