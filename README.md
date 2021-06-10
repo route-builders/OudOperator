@@ -31,7 +31,7 @@ The library to use the string read from OuDia file.
     import * as Encoder from 'encoding-japanese';
     import { readFileSync, writeFileSync } from 'fs';
 
-    const dataSet = new O_O();
+    const o_o = new O_O();
     const filepath = '/path/to/file.oud';
     const buffer = readFileSync(filepath);
 
@@ -49,12 +49,31 @@ The library to use the string read from OuDia file.
       .replace(/\r/g, '')
       .split('\n');
 
-    writeFileSync('demo.json', JSON.stringify(dataSet.fromOud(sources).toJSON()));
+    writeFileSync('demo.json', JSON.stringify(o_o.fromOud(sources).toJSON()));
     ```
 
 ### Browser
 
-wip
+hosted by [jsDelivr](https://www.jsdelivr.com/).
+
+https://cdn.jsdelivr.net/gh/route-builders/oud-operator-dist/O_O.js
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/gh/route-builders/oud-operator-dist/O_O.js"></script>
+    <script>
+      window.onload = () => {
+        const o_o = new O_O();
+        // ...
+      };
+    </script>
+  </head>
+  <body></body>
+</html>
+```
 
 ## Notice
 
