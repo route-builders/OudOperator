@@ -8,6 +8,9 @@ Hi> \(O_O)/
 
 The library to use the string read from OuDia file.
 
+**Document** (ja only)  
+https://doc.route.builders/oud-operator/
+
 - About OuDia
   The software for editing and displaying railroad diagrams.
   made by take-okm.

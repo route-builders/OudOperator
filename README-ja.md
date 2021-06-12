@@ -2,6 +2,9 @@
 
 このライブラリは`.oud`ファイルを javascript / typescript で利用するためのライブラリです。
 
+**Document**  
+https://doc.route.builders/oud-operator/
+
 - OuDia について
 
 Windows 向け鉄道ダイヤグラム編集・表示ソフトウェアです。
