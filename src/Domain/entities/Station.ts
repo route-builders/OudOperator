@@ -1,4 +1,4 @@
-import { IStation, StationValue } from '../types/IStation';
+import { IStation } from '../types/IStation';
 import { StationBoundary } from '../values/Station/StationBoundary';
 import { StationID } from '../values/Station/StationID';
 import { StationInboundTrainTimeFormat } from '../values/Station/StationInboundTrainTimeFormat';
@@ -16,14 +16,14 @@ export class Station implements IStation {
   public readonly inboundTrainInfo: StationInboundTrainTimeFormat;
   public readonly boundary: StationBoundary;
 
-  constructor(props: StationValue) {
-    this.uuid = new StationID(props.uuid);
-    this.name = new StationName(props.name);
-    this.timeFormat = new StationTimeFormat(props.timeFormat);
-    this.scale = new StationScale(props.scale);
-    this.outboundTrainInfo = new StationOutboundTrainTimeFormat(props.outboundTrainInfo);
-    this.inboundTrainInfo = new StationInboundTrainTimeFormat(props.inboundTrainInfo);
-    this.boundary = new StationBoundary(props.boundary);
+  constructor(props: IStation) {
+    this.uuid = props.uuid;
+    this.name = props.name;
+    this.timeFormat = props.timeFormat;
+    this.scale = props.scale;
+    this.outboundTrainInfo = props.outboundTrainInfo;
+    this.inboundTrainInfo = props.inboundTrainInfo;
+    this.boundary = props.boundary;
     Object.freeze(this);
   }
 }

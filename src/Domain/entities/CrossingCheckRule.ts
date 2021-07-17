@@ -1,4 +1,4 @@
-import { CrossingCheckRuleValue, ICrossingCheckRule } from '../types/ICrossingCheckRule';
+import { ICrossingCheckRule } from '../types/ICrossingCheckRule';
 import { CrossingCheckRuleAfterAction } from '../values/CrossingCheckRule/CrossingCheckRuleAfterAction';
 import { CrossingCheckRuleInterval } from '../values/CrossingCheckRule/CrossingCheckRuleInterval';
 import { CrossingCheckRuleName } from '../values/CrossingCheckRule/CrossingCheckRuleName';
@@ -18,12 +18,12 @@ export class CrossingCheckRule implements ICrossingCheckRule {
   public readonly preAction: CrossingCheckRulePreAction;
   public readonly afterAction: CrossingCheckRuleAfterAction;
 
-  constructor(props: CrossingCheckRuleValue) {
-    this.name = new CrossingCheckRuleName(props.name);
-    this.status = new CrossingCheckRuleStatus(props.status);
-    this.interval = new CrossingCheckRuleInterval(props.interval);
-    this.preAction = new CrossingCheckRulePreAction(props.preAction);
-    this.afterAction = new CrossingCheckRuleAfterAction(props.afterAction);
+  constructor(props: ICrossingCheckRule) {
+    this.name = props.name;
+    this.status = props.status;
+    this.interval = props.interval;
+    this.preAction = props.preAction;
+    this.afterAction = props.afterAction;
     Object.freeze(this);
   }
 }
