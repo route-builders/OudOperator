@@ -1,6 +1,6 @@
 import * as z from 'zod';
 import { externalStationIDSchema } from '../common/ExternalStationID';
-import { stationIDSchema } from '../common/StationID';
+import { stationIDSchema } from '../Station/StationID';
 import { trackIDSchema } from '../common/TrackID';
 import { trackTypeEnum } from '../common/TrackType';
 

@@ -31,10 +31,10 @@ export type CrossingCheckRuleValue = {
 /**
  * @type ICrossingCheckRule - 交差支障判定ルールentityの型
  */
-export interface ICrossingCheckRule {
+export type ICrossingCheckRule = {
   name: CrossingCheckRuleName;
   status: CrossingCheckRuleStatus;
   interval: CrossingCheckRuleInterval;
   preAction: CrossingCheckRulePreAction;
   afterAction: CrossingCheckRuleAfterAction;
-}
+};
