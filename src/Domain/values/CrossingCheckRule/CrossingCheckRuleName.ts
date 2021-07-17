@@ -1,9 +1,13 @@
 import * as z from 'zod';
+import { onelineStringSchema } from '../common/OnelineString';
 
 /**
  * @var crossingCheckRuleNameSchema - The zod schema of 交差支障判定ルール名
+ * 共通の単行文字列スキーマを用いている
+ *
+ * @see src/Domain/values/common/OnelineString.ts
  */
-export const crossingCheckRuleNameSchema = z.string().min(1);
+export const crossingCheckRuleNameSchema = onelineStringSchema;
 
 /**
  * @type crossingCheckRuleNameValue - The native type of 交差支障判定ルール名
