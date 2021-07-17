@@ -5,7 +5,6 @@ import { InvalidHEXColorError } from '../errors/InvalidHEXColorError';
  * A class for easy handling of color information
  *
  * @author up-tri
- * @since 1.0
  */
 export class Color {
   /**

@@ -2,7 +2,6 @@
  * A class for handling time information comfortably
  *
  * @author up-tri
- * @since 1.0
  */
 export class Time {
   /**

@@ -31,7 +31,6 @@ import { TrainType } from './models/TrainType';
  * A class with a data structure such as OuDia file.
  *
  * @author up-tri
- * @since 1.0
  */
 export class O_O {
   /**
