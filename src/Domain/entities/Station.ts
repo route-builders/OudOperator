@@ -1,9 +1,8 @@
 import { IStation } from '../types/IStation';
 import { StationBoundary } from '../values/Station/StationBoundary';
 import { StationID } from '../values/Station/StationID';
-import { StationInboundTrainTimeFormat } from '../values/Station/StationInboundTrainTimeFormat';
 import { StationName } from '../values/Station/StationName';
-import { StationOutboundTrainTimeFormat } from '../values/Station/StationOutboundTrainTimeFormat';
+import { StationTrainTimeFormat } from '../values/Station/StationTrainTimeFormat';
 import { StationScale } from '../values/Station/StationScale';
 import { StationTimeFormat } from '../values/Station/StationTimeFormat';
 
@@ -12,8 +11,8 @@ export class Station implements IStation {
   public readonly name: StationName;
   public readonly timeFormat: StationTimeFormat;
   public readonly scale: StationScale;
-  public readonly outboundTrainInfo: StationOutboundTrainTimeFormat;
-  public readonly inboundTrainInfo: StationInboundTrainTimeFormat;
+  public readonly outboundTrainInfo: StationTrainTimeFormat;
+  public readonly inboundTrainInfo: StationTrainTimeFormat;
   public readonly boundary: StationBoundary;
 
   constructor(props: IStation) {

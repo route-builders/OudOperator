@@ -2,9 +2,8 @@ import { Station } from '../entities/Station';
 import { StationValue } from '../types/IStation';
 import { StationBoundary } from '../values/Station/StationBoundary';
 import { StationID } from '../values/Station/StationID';
-import { StationInboundTrainTimeFormat } from '../values/Station/StationInboundTrainTimeFormat';
 import { StationName } from '../values/Station/StationName';
-import { StationOutboundTrainTimeFormat } from '../values/Station/StationOutboundTrainTimeFormat';
+import { StationTrainTimeFormat } from '../values/Station/StationTrainTimeFormat';
 import { StationScale } from '../values/Station/StationScale';
 import { StationTimeFormat } from '../values/Station/StationTimeFormat';
 
@@ -17,8 +16,8 @@ export class StationFactory {
       name: new StationName(name),
       timeFormat: new StationTimeFormat(timeFormat),
       scale: new StationScale(scale),
-      outboundTrainInfo: new StationOutboundTrainTimeFormat(outboundTrainInfo),
-      inboundTrainInfo: new StationInboundTrainTimeFormat(inboundTrainInfo),
+      outboundTrainInfo: new StationTrainTimeFormat(outboundTrainInfo),
+      inboundTrainInfo: new StationTrainTimeFormat(inboundTrainInfo),
       boundary: new StationBoundary(boundary),
     });
   }
