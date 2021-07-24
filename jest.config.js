@@ -2,7 +2,7 @@
 module.exports = {
   "roots": [
     "<rootDir>/tests",
-    "<rootDir>/e2e",
+    // "<rootDir>/e2e",
   ],
   "moduleDirectories": ['node_modules', 'src'],
   "moduleFileExtensions": [
@@ -11,7 +11,7 @@ module.exports = {
   ],
   "globals": {
     "ts-jest": {
-      "tsConfig": "tsconfig.json"
+      "tsconfig": "tsconfig.json"
     }
   },
   "moduleNameMapper": {
