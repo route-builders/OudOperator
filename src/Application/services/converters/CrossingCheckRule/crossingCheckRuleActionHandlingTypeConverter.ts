@@ -1,7 +1,7 @@
 import {
   crossingCheckRuleActionHandlingTypeEnum,
   CrossingCheckRuleActionHandlingTypeValue,
-} from '../../../../Domain/values/CrossingCheckRule/CrossingCheckRuleActionHandlingType';
+} from '../../../../Domain/domains/values/CrossingCheckRule/CrossingCheckRuleActionHandlingType';
 import { OudiaFileTypeVersioning } from '../../oudiaFileTypeVersioning';
 import { converter } from '../converter';
 import { ConverterTable } from '../types/ConverterTable';

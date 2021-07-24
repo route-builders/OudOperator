@@ -1,4 +1,7 @@
-import { stationTimeFormatEnum, StationTimeFormatValue } from '../../../../Domain/values/Station/StationTimeFormat';
+import {
+  stationTimeFormatEnum,
+  StationTimeFormatValue,
+} from '../../../../Domain/domains/values/Station/StationTimeFormat';
 import { OudiaFileTypeVersioning } from '../../oudiaFileTypeVersioning';
 import { converter } from '../converter';
 import { ConverterTable } from '../types/ConverterTable';

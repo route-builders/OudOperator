@@ -1,4 +1,4 @@
-import { stationScaleEnum, StationScaleValue } from '../../../../Domain/values/Station/StationScale';
+import { stationScaleEnum, StationScaleValue } from '../../../../Domain/domains/values/Station/StationScale';
 import { OudiaFileTypeVersioning } from '../../oudiaFileTypeVersioning';
 import { converter } from '../converter';
 import { ConverterTable } from '../types/ConverterTable';

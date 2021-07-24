@@ -1,4 +1,4 @@
-import { CrossingCheckRule } from '../entities/CrossingCheckRule';
+import { CrossingCheckRule } from '../models/CrossingCheckRule';
 import { CrossingCheckRuleValue } from '../types/ICrossingCheckRule';
 import { CrossingCheckRuleAfterAction } from '../values/CrossingCheckRule/CrossingCheckRuleAfterAction';
 import { CrossingCheckRuleInterval } from '../values/CrossingCheckRule/CrossingCheckRuleInterval';

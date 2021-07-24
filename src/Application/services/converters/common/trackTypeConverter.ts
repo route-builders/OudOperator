@@ -1,4 +1,4 @@
-import { trackTypeEnum, TrackTypeValue } from '../../../../Domain/values/common/TrackType';
+import { trackTypeEnum, TrackTypeValue } from '../../../../Domain/domains/values/common/TrackType';
 import { OudiaFileTypeVersioning } from '../../oudiaFileTypeVersioning';
 import { converter } from '../converter';
 import { ConverterTable } from '../types/ConverterTable';

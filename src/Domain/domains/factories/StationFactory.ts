@@ -1,4 +1,4 @@
-import { Station } from '../entities/Station';
+import { Station } from '../models/Station';
 import { StationValue } from '../types/IStation';
 import { StationBoundary } from '../values/Station/StationBoundary';
 import { StationID } from '../values/Station/StationID';

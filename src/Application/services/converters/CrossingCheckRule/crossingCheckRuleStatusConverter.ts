@@ -1,7 +1,7 @@
 import {
   crossingCheckRuleStatusEnum,
   CrossingCheckRuleStatusValue,
-} from '../../../../Domain/values/CrossingCheckRule/CrossingCheckRuleStatus';
+} from '../../../../Domain/domains/values/CrossingCheckRule/CrossingCheckRuleStatus';
 import { OudiaFileTypeVersioning } from '../../oudiaFileTypeVersioning';
 import { converter } from '../converter';
 import { ConverterTable } from '../types/ConverterTable';

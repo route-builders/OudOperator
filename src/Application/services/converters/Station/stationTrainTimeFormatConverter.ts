@@ -1,7 +1,7 @@
 import {
   stationTrainTimeFormatEnum,
   StationTrainTimeFormatValue,
-} from '../../../../Domain/values/Station/StationTrainTimeFormat';
+} from '../../../../Domain/domains/values/Station/StationTrainTimeFormat';
 import { OudiaFileTypeVersioning } from '../../oudiaFileTypeVersioning';
 import { converter } from '../converter';
 import { ConverterTable } from '../types/ConverterTable';
