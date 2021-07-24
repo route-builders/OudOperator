@@ -26,16 +26,32 @@ export class CommonColor {
     Object.freeze(this);
   }
 
+  private get hexR(): string {
+    return ('00' + `${this.value.r.toString(16)}`).slice(-2);
+  }
+  private get hexG(): string {
+    return ('00' + `${this.value.g.toString(16)}`).slice(-2);
+  }
+  private get hexB(): string {
+    return ('00' + `${this.value.b.toString(16)}`).slice(-2);
+  }
+  private get hexA(): string {
+    return ('00' + `${Math.floor(this.value.a * 255).toString(16)}`).slice(-2);
+  }
+
   get rgb(): string {
     return 'rgb(' + this.value.r + ', ' + this.value.g + ', ' + this.value.b + ')';
   }
 
-  get hex(): string {
-    return '#' + this.value.r.toString(16) + this.value.g.toString(16) + this.value.b.toString(16);
+  get rgba(): string {
+    return 'rgba(' + this.value.r + ', ' + this.value.g + ', ' + this.value.b + ', ' + this.value.a + ')';
   }
 
-  get bgr(): string {
-    // FIXME: Alpha
-    return '#' + this.value.b.toString(16) + this.value.g.toString(16) + this.value.r.toString(16) + '00';
+  get hex(): string {
+    return '#' + this.hexR + this.hexG + this.hexB;
+  }
+
+  get bgra(): string {
+    return '#' + this.hexB + this.hexG + this.hexR + this.hexA;
   }
 }

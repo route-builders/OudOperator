@@ -2,47 +2,39 @@ import * as z from 'zod';
 import { Langs, ValueLabel } from '../types';
 
 export const stationHandlineTypeEnum = {
-  normal: 'normal',
-  dotted: 'dotted',
-  dashed: 'dashed',
-  dash_dotted: 'dash_dotted',
-  two_dot_chain: 'two_dot_chain',
+  no_operation: 'no_operation',
+  stopping: 'stopping',
+  passing: 'passing',
+  not_via: 'not_via',
 } as const;
 
 export const stationHandlineTypeLabels: ValueLabel<StationHandlineTypeValue>[] = [
   {
-    value: stationHandlineTypeEnum.normal,
+    value: stationHandlineTypeEnum.no_operation,
     labels: {
-      ja: '実線',
-      en: 'solid line',
+      ja: '運行なし',
+      en: 'no operation',
     },
   },
   {
-    value: stationHandlineTypeEnum.dotted,
+    value: stationHandlineTypeEnum.stopping,
     labels: {
-      ja: '点線',
-      en: 'dotted line',
+      ja: '停車',
+      en: 'stopping',
     },
   },
   {
-    value: stationHandlineTypeEnum.dashed,
+    value: stationHandlineTypeEnum.passing,
     labels: {
-      ja: '破線',
-      en: 'dashed line',
+      ja: '通過',
+      en: 'passing',
     },
   },
   {
-    value: stationHandlineTypeEnum.dash_dotted,
+    value: stationHandlineTypeEnum.not_via,
     labels: {
-      ja: '一点鎖線',
-      en: 'dash dotted line',
-    },
-  },
-  {
-    value: stationHandlineTypeEnum.two_dot_chain,
-    labels: {
-      ja: '二点鎖線',
-      en: 'two-dot chain line',
+      ja: '経由なし',
+      en: 'not via',
     },
   },
 ];
@@ -57,11 +49,10 @@ const translateValueToLabel = (value: StationHandlineTypeValue, lang: Langs): st
 };
 
 export const stationHandlineTypeSchema = z.union([
-  z.literal(stationHandlineTypeEnum.normal),
-  z.literal(stationHandlineTypeEnum.dotted),
-  z.literal(stationHandlineTypeEnum.dashed),
-  z.literal(stationHandlineTypeEnum.dash_dotted),
-  z.literal(stationHandlineTypeEnum.two_dot_chain),
+  z.literal(stationHandlineTypeEnum.no_operation),
+  z.literal(stationHandlineTypeEnum.stopping),
+  z.literal(stationHandlineTypeEnum.passing),
+  z.literal(stationHandlineTypeEnum.not_via),
 ]);
 
 export type StationHandlineTypeValue = z.infer<typeof stationHandlineTypeSchema>;
