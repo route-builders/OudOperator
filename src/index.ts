@@ -11,7 +11,6 @@
  * made by take-okm.
  * @see {@link http://take-okm.a.la9.jp/oudia/ }
  *
- * Copyright 2018-2019 up-tri
  * under the MIT License.
  *
  * @author up-tri
