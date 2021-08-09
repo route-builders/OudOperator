@@ -18,8 +18,7 @@ module.exports = {
           {
             loader: 'ts-loader',
             options: {
-              configFile: "tsconfig.json",
-              // configFile: "webpack.tsconfig.json",
+              configFile: "webpack.tsconfig.json",
             }
           },
           // {
