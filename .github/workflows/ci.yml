@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: '14.x'
       - name: install & build
-        run: npm i && npm run prepare
+        run: npm i && npm run build:webpack
       - name: Pushes to dist repository
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@master

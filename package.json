@@ -1,6 +1,6 @@
 {
   "name": "@route-builders/oud-operator",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "The library to use the string read from OuDia file",
   "main": "./dist/O_O.js",
   "types": "./dist/index.d.ts",
@@ -18,19 +18,19 @@
     "build:watch": "tsc --watch",
     "build:prod": "tsc -p tsconfig.prod.json",
     "build:webpack": "webpack",
-    "prepare": "webpack",
+    "prepare": "tsc -p tsconfig.prod.json",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/up-tri/OudOperator.git"
+    "url": "git+https://github.com/route-builders/OudOperator.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/up-tri/OudOperator/issues"
+    "url": "https://github.com/route-builders/OudOperator/issues"
   },
-  "homepage": "https://github.com/up-tri/OudOperator#readme",
+  "homepage": "https://github.com/route-builders/OudOperator#readme",
   "dependencies": {
     "@route-builders/oud-to-json": "^0.0.7",
     "encoding-japanese": "^1.0.30",
