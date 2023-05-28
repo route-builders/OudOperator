@@ -18,7 +18,8 @@
     "build:watch": "tsc --watch",
     "build:prod": "tsc -p tsconfig.prod.json",
     "build:webpack": "webpack",
-    "prepare": "tsc -p tsconfig.prod.json",
+    "postinstall": "npm run build:prod",
+    "prepare": "npm run build:prod",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
