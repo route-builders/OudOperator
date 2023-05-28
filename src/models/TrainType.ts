@@ -149,9 +149,9 @@ export class TrainType {
     return {
       name: this.name,
       shortname: this.shortname,
-      trainColor: this.trainColor,
+      trainColor: this.trainColor.toJSON(),
       fontIdx: this.fontIdx,
-      lineColor: this.lineColor,
+      lineColor: this.lineColor.toJSON(),
       lineType: this.lineType,
       lineWeight: this.lineWeight,
       shoudDrawStopMark: this.shoudDrawStopMark,

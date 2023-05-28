@@ -110,7 +110,7 @@ export class Streak {
       name: this.name,
       no: this.no,
       destIdx: this.destIdx,
-      stHandlings: this.stHandlings,
+      stHandlings: this.stHandlings.map((v) => v.toJSON()),
       comment: this.comment,
     };
   }
