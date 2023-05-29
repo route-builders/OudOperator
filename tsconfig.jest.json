@@ -1,5 +1,9 @@
 {
   "extends": "./tsconfig.json",
+  "types": [
+    "node",
+    "jest"
+  ],
   "include": [
     "src/**/*",
     "tests/**/*"
