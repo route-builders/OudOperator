@@ -19,7 +19,6 @@ jobs:
       - name: bumpup version
         run: node scripts/bumpup.js
       - name: commit bumpup
-        id: push_directory
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
@@ -50,7 +49,6 @@ jobs:
           rm -rf dist
           npm run build:webpack
       - name: Pushes to dist repository
-        id: push_directory
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
