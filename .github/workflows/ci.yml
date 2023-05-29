@@ -14,8 +14,41 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '14.x'
-      - name: install & build
-        run: npm i && npm run build:webpack
+      - name: install modules
+        run: npm i
+      - name: bumpup version
+        run: node scripts/bumpup.js
+      - name: commit bumpup
+        id: push_directory
+        uses: cpina/github-action-push-to-another-repository@master
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: '.'
+          destination-github-username: 'route-builders'
+          destination-repository-name: 'OudOperator'
+          user-email: yaki-shake@up-tri.me
+          user-name: up-tri
+          commit-message: '[skip ci] bumpup version'
+          target-branch: master
+      - name: setup tagname
+        run: |
+          TAG_NAME=$(node scripts/version.js)
+          echo $TAG_NAME
+      - name: push tag
+        run: |
+          git tag $TAG_NAME
+          git push origin $cat TAG_NAME
+      - name: build:prod
+        run: npm run build:webpack
+      - name: release
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: build:webpack
+        run: |
+          rm -rf dist
+          npm run build:webpack
       - name: Pushes to dist repository
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@master
@@ -27,5 +60,5 @@ jobs:
           destination-repository-name: 'oud-operator-dist'
           user-email: yaki-shake@up-tri.me
           user-name: up-tri
-          commit-message: See ORIGIN_COMMIT from $GITHUB_REF
+          commit-message: release $TAG_NAME
           target-branch: master
