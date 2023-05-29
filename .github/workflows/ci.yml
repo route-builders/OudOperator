@@ -32,12 +32,11 @@ jobs:
           target-branch: master
       - name: setup tagname
         run: |
-          TAG_NAME=$(node scripts/version.js)
-          echo $TAG_NAME
+          echo "DEPLOYING_TAG_NAME=$(node scripts/version.js)" >> $GITHUB_ENV
       - name: push tag
         run: |
-          git tag $TAG_NAME
-          git push origin $cat TAG_NAME
+          git tag ${{ env.DEPLOYING_TAG_NAME }}
+          git push origin ${{ env.DEPLOYING_TAG_NAME }}
       - name: build:prod
         run: npm run build:webpack
       - name: release
@@ -58,5 +57,5 @@ jobs:
           destination-repository-name: 'oud-operator-dist'
           user-email: yaki-shake@up-tri.me
           user-name: up-tri
-          commit-message: release $TAG_NAME
+          commit-message: release ${{ env.DEPLOYING_TAG_NAME }}
           target-branch: master
