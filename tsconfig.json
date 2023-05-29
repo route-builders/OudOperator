@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["ES2018"],
+    "lib": [
+      "ES2018"
+    ],
     "allowJs": true,
     "checkJs": true,
     "declaration": true,
@@ -13,7 +15,6 @@
     "removeComments": true,
     "noEmit": false,
     "isolatedModules": true,
-
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -22,19 +23,19 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noPropertyAccessFromIndexSignature": true,
-
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "rootDir": "src",
     "baseUrl": "./",
-    "types": ["node", "jest"],
+    "types": [
+      "node"
+    ],
     "allowSyntheticDefaultImports": false,
     "esModuleInterop": true,
     "inlineSourceMap": false,
