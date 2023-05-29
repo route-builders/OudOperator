@@ -44,11 +44,12 @@ jobs:
         with:
           tag_name: ${{ env.DEPLOYING_TAG_NAME }}
           release_name: Release ${{ env.DEPLOYING_TAG_NAME }}
+          commitish: master
           draft: false
           prerelease: false
       - name: build:prod
         run: npm run build:webpack
-      - name: release
+      - name: release to npm
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -56,7 +57,7 @@ jobs:
         run: |
           rm -rf dist
           npm run build:webpack
-      - name: Pushes to dist repository
+      - name: release to dist
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
