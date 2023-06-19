@@ -13,12 +13,12 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
     "clean": "tsc --clean",
+    "build:dev": "tsc",
     "build:watch": "tsc --watch",
     "build:prod": "tsc -p tsconfig.prod.json",
     "build:webpack": "webpack",
-    "prepare": "npm run build:prod",
+    "postinstall": "npm run build:prod",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
