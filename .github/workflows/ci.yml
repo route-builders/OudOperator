@@ -14,12 +14,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '14.x'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@route-builders'
+          always-auth: true
       - name: install modules
         run: npm i
       - name: bumpup version
         run: node scripts/bumpup.js
       - name: commit bumpup
-        id: push_directory
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
@@ -33,15 +35,21 @@ jobs:
           target-branch: master
       - name: setup tagname
         run: |
-          TAG_NAME=$(node scripts/version.js)
-          echo $TAG_NAME
-      - name: push tag
-        run: |
-          git tag $TAG_NAME
-          git push origin $cat TAG_NAME
+          echo "DEPLOYING_TAG_NAME=$(node scripts/version.js)" >> $GITHUB_ENV
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.DEPLOYING_TAG_NAME }}
+          release_name: Release ${{ env.DEPLOYING_TAG_NAME }}
+          commitish: master
+          draft: false
+          prerelease: false
       - name: build:prod
         run: npm run build:webpack
-      - name: release
+      - name: release to npm
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -49,8 +57,7 @@ jobs:
         run: |
           rm -rf dist
           npm run build:webpack
-      - name: Pushes to dist repository
-        id: push_directory
+      - name: release to dist
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
@@ -60,5 +67,5 @@ jobs:
           destination-repository-name: 'oud-operator-dist'
           user-email: yaki-shake@up-tri.me
           user-name: up-tri
-          commit-message: release $TAG_NAME
+          commit-message: release ${{ env.DEPLOYING_TAG_NAME }}
           target-branch: master
