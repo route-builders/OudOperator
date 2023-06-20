@@ -1,9 +1,14 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "dist", "tests", "**/*test.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests",
+    "**/*test.ts"
+  ],
   "compilerOptions": {
-    "incremental": true,
-    "declarationMap": false,
-    "sourceMap": false
+    "declaration": true,
+    "declarationDir": "./types",
+    "declarationMap": false
   }
 }

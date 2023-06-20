@@ -7,9 +7,6 @@
     ],
     "allowJs": true,
     "checkJs": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
     "outDir": "dist",
     "composite": true,
     "removeComments": true,
@@ -33,13 +30,11 @@
     "moduleResolution": "node",
     "rootDir": "src",
     "baseUrl": "./",
-    "types": [
-      "node"
-    ],
     "allowSyntheticDefaultImports": false,
     "esModuleInterop": true,
+    "sourceMap": true,
     "inlineSourceMap": false,
-    "inlineSources": false,
+    "inlineSources": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
