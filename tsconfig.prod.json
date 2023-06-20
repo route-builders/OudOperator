@@ -5,5 +5,12 @@
     "dist",
     "tests",
     "**/*test.ts"
-  ]
+  ],
+  "compilerOptions": {
+    "inlineSources": false,
+    "sourceMap": false,
+    "declaration": true,
+    "declarationDir": "./types",
+    "declarationMap": false
+  }
 }
