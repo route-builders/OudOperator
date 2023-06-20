@@ -28,7 +28,7 @@ jobs:
           [ -s ./dist/O_O.js ]
       - name: build & check npm dist
         run: |
-          rm -rf dist && \
+          rm -rf dist *.tsbuildinfo && \
           npm run build:prod && \
           [ -s ./dist/index.js ] && \
           [ -s ./types/index.d.ts ]
