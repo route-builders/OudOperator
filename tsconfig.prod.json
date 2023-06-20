@@ -7,8 +7,6 @@
     "**/*test.ts"
   ],
   "compilerOptions": {
-    "inlineSources": true,
-    "sourceMap": false,
     "declaration": true,
     "declarationDir": "./types",
     "declarationMap": false
