@@ -24,13 +24,13 @@ jobs:
         run: npm i
       - name: build & check webpack dist
         run: |
-          npm run build:webpack
+          npm run build:webpack && \
           [ -s ./dist/O_O.js ]
       - name: build & check npm dist
         run: |
-          rm -rf dist
-          npm run build:prod
-          [ -s ./dist/index.js ]
+          rm -rf dist && \
+          npm run build:prod && \
+          [ -s ./dist/index.js ] && \
           [ -s ./types/index.d.js ]
   build:
     runs-on: ubuntu-latest
