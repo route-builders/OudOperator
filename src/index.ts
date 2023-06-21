@@ -182,8 +182,8 @@ export class O_O {
                     stHandling.arrival.setTime(arrAndDep[0]);
                     stHandling.departure.setTime(null);
                   } else {
-                    stHandling.departure.setTime(arrAndDep[0]);
-                    stHandling.arrival.setTime(arrAndDep[1]);
+                    stHandling.arrival.setTime(arrAndDep[0]);
+                    stHandling.departure.setTime(arrAndDep[1]);
                   }
                 }
               }
