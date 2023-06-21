@@ -1,9 +1,10 @@
-name: develop-build-and-test
+name: build-and-test
 
 on:
   pull_request:
     branches:
       - develop
+      - master
   push:
     branches:
       - develop
