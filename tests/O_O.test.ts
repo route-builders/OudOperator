@@ -183,12 +183,12 @@ describe('O_O#trainTypes', () => {
 
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[1]!.departure).toEqual(18060);
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[2]!.departure).toEqual(18120);
-    expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[3]!.departure).toEqual(18180);
+    expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[3]!.departure).toEqual(18240);
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[4]!.departure).toEqual(-1);
 
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[1]!.arrival).toEqual(-1);
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[2]!.arrival).toEqual(-1);
-    expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[3]!.arrival).toEqual(18240);
+    expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[3]!.arrival).toEqual(18180);
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[4]!.arrival).toEqual(18300);
   });
 });
