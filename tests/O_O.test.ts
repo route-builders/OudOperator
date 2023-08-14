@@ -47,8 +47,7 @@ describe('O_O', () => {
       expect(oo.diagrams.length).toEqual(2);
       expect(oo.fileType).toEqual('OuDia.1.02');
 
-      // FIXME: bug?
-      // expect(oo.fileTypeAppComment).toEqual('OuDia Ver. 1.02.02');
+      expect(oo.fileTypeAppComment).toEqual('OuDia Ver. 1.02.02');
 
       expect(oo.name).toEqual('東急東横線(13/04/21)');
       expect(oo.stations.length).toEqual(41);
@@ -65,8 +64,7 @@ describe('O_O', () => {
       expect(oo.diagrams.length).toEqual(2);
       expect(oo.fileType).toEqual('OuDia.1.02');
 
-      // FIXME: bug
-      // expect(oo.fileTypeAppComment).toEqual('OuDia Ver. 1.02.02');
+      expect(oo.fileTypeAppComment).toEqual('OuDia Ver. 1.02.02');
 
       expect(oo.name).toEqual('東急東横線(13/04/21)');
       expect(oo.stations.length).toEqual(41);
@@ -133,7 +131,7 @@ describe('O_O#trainTypes', () => {
       lineType: 0,
       lineWeight: 0,
       // FIXME: bug
-      shoudDrawStopMark: true,
+      shoudDrawStopMark: false,
     });
 
     expect(oo.trainTypes[1]!.toJSON().name).toEqual('traintype_solid__text_red__line_blue');
@@ -167,14 +165,13 @@ describe('O_O#trainTypes', () => {
 
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().operationNum).toEqual('');
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().typeIdx).toEqual(0);
-    expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().name).toEqual(' ');
+    expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().name).toEqual('');
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().destIdx).toEqual(0);
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().comment).toEqual('');
 
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings.length).toEqual(5);
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[0]).toEqual({
-      // FIXME: bug
-      type: 1,
+      type: 10,
 
       arrival: -1,
       departure: 18000,

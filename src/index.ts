@@ -25,6 +25,7 @@ import { Station } from './models/Station';
 import { StHandling } from './models/StHandling';
 import { Streak } from './models/Streak';
 // import { Time } from './models/Time';
+import { stHandlingType } from './converter/StHandling/stHandlingType';
 import { TrainType } from './models/TrainType';
 
 /**
@@ -125,6 +126,7 @@ export class O_O {
     // conf
     this.fileType = json['FileType'];
     this.name = root['Rosenmei'];
+    this.fileTypeAppComment = json.FileTypeAppComment;
 
     // station
     this.stations = root.Eki.map((stationJSON: any) => {
@@ -147,9 +149,7 @@ export class O_O {
       trainType.lineColor = new Color();
       trainType.lineColor.setFromABGR(typeJSON.DiagramSenColor);
       trainType.lineType = TrainType.lineStyleToInt(typeJSON.DiagramSenStyle);
-      if (typeJSON['StopMarkDrawType']) {
-        trainType.shoudDrawStopMark = true;
-      }
+      trainType.shoudDrawStopMark = typeJSON['StopMarkDrawType'] === 'EStopMarkDrawType_DrawOnStop';
       return trainType;
     });
 
@@ -170,7 +170,7 @@ export class O_O {
           if (handling !== '') {
             const homeAndTimes = handling.split(';');
             if (homeAndTimes[0]) {
-              stHandling.type = parseInt(homeAndTimes[0]);
+              stHandling.type = stHandlingType.fromNative(homeAndTimes[0]);
               // when station time exists
               if (homeAndTimes[1] !== undefined) {
                 const arrAndDep = homeAndTimes[1].split('/');
@@ -198,8 +198,8 @@ export class O_O {
     this.diagrams = root.Dia.map((diaJSON: any) => {
       const dia = new Diagram();
       dia.name = diaJSON.DiaName;
-      dia.downStreaks = __parseStreaks(diaJSON.Kudari[0]);
-      dia.upStreaks = __parseStreaks(diaJSON.Nobori[0]);
+      dia.downStreaks = __parseStreaks(diaJSON.Kudari);
+      dia.upStreaks = __parseStreaks(diaJSON.Nobori);
       return dia;
     });
 
