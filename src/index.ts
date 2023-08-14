@@ -125,6 +125,7 @@ export class O_O {
     // conf
     this.fileType = json['FileType'];
     this.name = root['Rosenmei'];
+    this.fileTypeAppComment = json.FileTypeAppComment;
 
     // station
     this.stations = root.Eki.map((stationJSON: any) => {
