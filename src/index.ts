@@ -25,6 +25,7 @@ import { Station } from './models/Station';
 import { StHandling } from './models/StHandling';
 import { Streak } from './models/Streak';
 // import { Time } from './models/Time';
+import { stHandlingType } from './converter/StHandling/stHandlingType';
 import { TrainType } from './models/TrainType';
 
 /**
@@ -169,7 +170,7 @@ export class O_O {
           if (handling !== '') {
             const homeAndTimes = handling.split(';');
             if (homeAndTimes[0]) {
-              stHandling.type = parseInt(homeAndTimes[0]);
+              stHandling.type = stHandlingType.fromNative(homeAndTimes[0]);
               // when station time exists
               if (homeAndTimes[1] !== undefined) {
                 const arrAndDep = homeAndTimes[1].split('/');

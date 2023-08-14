@@ -171,8 +171,7 @@ describe('O_O#trainTypes', () => {
 
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings.length).toEqual(5);
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().stHandlings[0]).toEqual({
-      // FIXME: bug
-      type: 1,
+      type: 10,
 
       arrival: -1,
       departure: 18000,
