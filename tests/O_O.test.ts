@@ -131,7 +131,7 @@ describe('O_O#trainTypes', () => {
       lineType: 0,
       lineWeight: 0,
       // FIXME: bug
-      shoudDrawStopMark: true,
+      shoudDrawStopMark: false,
     });
 
     expect(oo.trainTypes[1]!.toJSON().name).toEqual('traintype_solid__text_red__line_blue');

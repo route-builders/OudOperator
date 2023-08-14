@@ -149,9 +149,7 @@ export class O_O {
       trainType.lineColor = new Color();
       trainType.lineColor.setFromABGR(typeJSON.DiagramSenColor);
       trainType.lineType = TrainType.lineStyleToInt(typeJSON.DiagramSenStyle);
-      if (typeJSON['StopMarkDrawType']) {
-        trainType.shoudDrawStopMark = true;
-      }
+      trainType.shoudDrawStopMark = typeJSON['StopMarkDrawType'] === 'EStopMarkDrawType_DrawOnStop';
       return trainType;
     });
 
