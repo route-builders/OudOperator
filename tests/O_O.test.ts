@@ -47,8 +47,7 @@ describe('O_O', () => {
       expect(oo.diagrams.length).toEqual(2);
       expect(oo.fileType).toEqual('OuDia.1.02');
 
-      // FIXME: bug?
-      // expect(oo.fileTypeAppComment).toEqual('OuDia Ver. 1.02.02');
+      expect(oo.fileTypeAppComment).toEqual('OuDia Ver. 1.02.02');
 
       expect(oo.name).toEqual('東急東横線(13/04/21)');
       expect(oo.stations.length).toEqual(41);
@@ -65,8 +64,7 @@ describe('O_O', () => {
       expect(oo.diagrams.length).toEqual(2);
       expect(oo.fileType).toEqual('OuDia.1.02');
 
-      // FIXME: bug
-      // expect(oo.fileTypeAppComment).toEqual('OuDia Ver. 1.02.02');
+      expect(oo.fileTypeAppComment).toEqual('OuDia Ver. 1.02.02');
 
       expect(oo.name).toEqual('東急東横線(13/04/21)');
       expect(oo.stations.length).toEqual(41);
