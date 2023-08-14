@@ -167,7 +167,7 @@ describe('O_O#trainTypes', () => {
 
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().operationNum).toEqual('');
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().typeIdx).toEqual(0);
-    expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().name).toEqual(' ');
+    expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().name).toEqual('');
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().destIdx).toEqual(0);
     expect(oo.diagrams[0]!.downStreaks[0]!.toJSON().comment).toEqual('');
 

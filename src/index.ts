@@ -198,8 +198,8 @@ export class O_O {
     this.diagrams = root.Dia.map((diaJSON: any) => {
       const dia = new Diagram();
       dia.name = diaJSON.DiaName;
-      dia.downStreaks = __parseStreaks(diaJSON.Kudari[0]);
-      dia.upStreaks = __parseStreaks(diaJSON.Nobori[0]);
+      dia.downStreaks = __parseStreaks(diaJSON.Kudari);
+      dia.upStreaks = __parseStreaks(diaJSON.Nobori);
       return dia;
     });
 
