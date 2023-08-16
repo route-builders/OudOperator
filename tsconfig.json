@@ -30,6 +30,9 @@
     "moduleResolution": "node",
     "rootDir": "src",
     "baseUrl": "./",
+    "types": [
+      "node"
+    ],
     "allowSyntheticDefaultImports": false,
     "esModuleInterop": true,
     "sourceMap": true,
