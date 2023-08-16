@@ -1323,15 +1323,6 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@route-builders/oud-operator@file:":
-  version "3.0.2"
-  resolved "file:"
-  dependencies:
-    "@route-builders/oud-operator" "file:"
-    "@route-builders/oud-to-json" "^2.0.8"
-    encoding-japanese "^2.0.0"
-    typescript "^5.1.6"
-
 "@route-builders/oud-to-json@^2.0.8":
   version "2.0.8"
   resolved "https://registry.npmjs.org/@route-builders/oud-to-json/-/oud-to-json-2.0.8.tgz"

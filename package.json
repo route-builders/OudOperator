@@ -1,6 +1,6 @@
 {
   "name": "@route-builders/oud-operator",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "The library to use the string read from OuDia file",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
