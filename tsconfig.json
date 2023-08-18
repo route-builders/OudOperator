@@ -5,10 +5,14 @@
     "lib": [
       "ES2018"
     ],
+    "declaration": true,
+    "declarationDir": "./types",
+    "declarationMap": false,
     "allowJs": true,
     "checkJs": true,
     "outDir": "dist",
-    "composite": true,
+    "composite": false,
+    "incremental": false,
     "removeComments": true,
     "noEmit": false,
     "isolatedModules": true,
