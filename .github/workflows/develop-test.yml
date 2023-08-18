@@ -32,7 +32,7 @@ jobs:
       - name: build & check npm dist
         run: |
           rm -rf dist *.tsbuildinfo && \
-          npm run build:prod && \
+          npm run build && \
           [ -s ./dist/index.js ] && \
           [ -s ./types/index.d.ts ]
   test:

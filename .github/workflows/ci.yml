@@ -29,7 +29,7 @@ jobs:
       - name: build & check npm dist
         run: |
           rm -rf dist *.tsbuildinfo && \
-          npm run build:prod && \
+          npm run build && \
           [ -s ./dist/index.js ] && \
           [ -s ./types/index.d.ts ]
       - name: test
@@ -76,7 +76,7 @@ jobs:
           commitish: master
           draft: false
           prerelease: false
-      - name: build:prod
+      - name: build
         run: npm run build:webpack
       - name: release to npm
         run: npm publish
