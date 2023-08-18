@@ -1,6 +1,6 @@
 {
   "name": "@route-builders/oud-operator",
-  "version": "3.0.6",
+  "version": "3.0.10",
   "description": "The library to use the string read from OuDia file",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/route-builders/OudOperator#readme",
   "dependencies": {
-    "@route-builders/oud-to-json": "^2.0.9-dev.9",
+    "@route-builders/oud-to-json": "^2.0.11",
     "encoding-japanese": "^2.0.0",
     "typescript": "^5.1.6"
   },
