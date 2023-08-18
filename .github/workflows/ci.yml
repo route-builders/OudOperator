@@ -84,7 +84,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: build:webpack
         run: |
-          rm -rf dist *.tsbuildinfo
+          rm -rf dist types *.tsbuildinfo
           npm run build:webpack
       - name: release to dist
         uses: cpina/github-action-push-to-another-repository@master
