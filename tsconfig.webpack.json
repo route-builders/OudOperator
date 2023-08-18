@@ -3,6 +3,7 @@
   "compilerOptions": {
     "composite": false,
     "declaration": false,
+    "declarationDir": null,
     "declarationMap": false,
     "sourceMap": false,
     "inlineSourceMap": false,

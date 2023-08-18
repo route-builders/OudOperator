@@ -4,11 +4,11 @@ module.exports = {
   entry: './src/index.ts',
   output: {
     path: `${__dirname}/dist`,
-    filename: "O_O.js",
+    filename: 'O_O.js',
     library: {
-      type: "umd"
+      type: 'umd',
     },
-    globalObject: "this"
+    globalObject: 'this',
   },
   module: {
     rules: [
@@ -18,16 +18,14 @@ module.exports = {
           {
             loader: 'ts-loader',
             options: {
-              configFile: "webpack.tsconfig.json",
-            }
+              configFile: 'tsconfig.webpack.json',
+            },
           },
         ],
       },
     ],
   },
   resolve: {
-    extensions: [
-      '.ts', ".js",
-    ],
+    extensions: ['.ts', '.js'],
   },
 };
