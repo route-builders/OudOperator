@@ -8,4 +8,4 @@ npx npm-check-updates -u
 rm -rf package-lock.json yarn.lock
 npm install
 
-# npm run test && git add . && git commit -m "update pkgs" && git push -u origin $branch_name && gh pr create --fill
+npm run test && git add . && git commit -m "update pkgs" && git push -u origin $branch_name && gh pr create --fill
