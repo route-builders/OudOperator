@@ -35,7 +35,7 @@ describe('O_O', () => {
     // read sample data
     const oudFileLines = fs
       .readFileSync(path.join(__dirname, './resources/fukutoshin_tokyu_toyoko_minatomirai_130421.oud'), 'utf8')
-      .split('\n');
+      .split(/\r\n|\n/);
 
     test('should complete to parse valid data.', () => {
       const oo = new O_O();
@@ -78,7 +78,7 @@ describe('O_O', () => {
 
 describe('O_O#stations', () => {
   // read sample data
-  const ekiPatterns = fs.readFileSync(path.join(__dirname, './resources/mock/eki_patterns.oud'), 'utf8').split('\n');
+  const ekiPatterns = fs.readFileSync(path.join(__dirname, './resources/mock/eki_patterns.oud'), 'utf8').split(/\r\n|\n/);
 
   test('should complete to parse valid stations.', () => {
     const oo = new O_O();
@@ -116,20 +116,20 @@ describe('O_O#stations', () => {
 
 describe('O_O#trainTypes', () => {
   // read sample data
-  const ekiPatterns = fs.readFileSync(path.join(__dirname, './resources/mock/ressya_patterns.oud'), 'utf8').split('\n');
+  const ekiPatterns = fs.readFileSync(path.join(__dirname, './resources/mock/ressya_patterns.oud'), 'utf8').split(/\r\n|\n/);
 
   test('should complete to parse valid trainTypes.', () => {
     const oo = new O_O();
     oo.fromOud(ekiPatterns);
 
-    expect(oo.trainTypes.length).toEqual(6);
+    expect(oo.trainTypes.length).toEqual(7);
     expect(oo.trainTypes[0]!.toJSON()).toEqual({
       name: 'traintype_solid',
       trainColor: { r: 0, g: 0, b: 0 },
       fontIdx: 0,
       lineColor: { r: 0, g: 0, b: 0 },
       lineType: 0,
-      lineWeight: 0,
+      lineWeight: 1,
       // FIXME: bug
       shoudDrawStopMark: false,
     });
@@ -149,12 +149,13 @@ describe('O_O#trainTypes', () => {
 
     expect(oo.trainTypes[5]!.toJSON().name).toEqual('traintype_solid__withalias');
     expect(oo.trainTypes[5]!.toJSON().shortname).toEqual('alias name');
+    expect(oo.trainTypes[6]!.toJSON().lineWeight).toEqual(2);
   });
 });
 
 describe('O_O#trainTypes', () => {
   // read sample data
-  const ekiPatterns = fs.readFileSync(path.join(__dirname, './resources/mock/eki_patterns.oud'), 'utf8').split('\n');
+  const ekiPatterns = fs.readFileSync(path.join(__dirname, './resources/mock/eki_patterns.oud'), 'utf8').split(/\r\n|\n/);
 
   test('should complete to parse valid trainTypes.', () => {
     const oo = new O_O();
