@@ -118,7 +118,7 @@ export class Color {
    * @return {string} A string representing color in the form of HEX
    */
   public HEX(withSharp: boolean = true): string {
-    return (withSharp ? '#' : '') + this._r.toString(16) + this._g.toString(16) + this._b.toString(16);
+    return (withSharp ? '#' : '') + this._r.toString(16).padStart(2, '0') + this._g.toString(16).padStart(2, '0')+ this._b.toString(16).padStart(2, '0');
   }
   /**
    * to get string representing a color such as "#3c14dc00"
@@ -128,7 +128,7 @@ export class Color {
    * @return {string} A string representing color in the form of BGRA
    */
   public BGR(withSharp: boolean = true): string {
-    return (withSharp ? '#' : '') + this._b.toString(16) + this._g.toString(16) + this._r.toString(16) + '00';
+    return (withSharp ? '#' : '') + this._b.toString(16).padStart(2, '0') + this._g.toString(16).padStart(2, '0') + this._r.toString(16).padStart(2, '0') + '00';
   }
 
   toJSON() {
