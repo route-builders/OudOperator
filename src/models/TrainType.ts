@@ -144,6 +144,20 @@ export class TrainType {
         return 0;
     }
   }
+  /**
+   * A static method to convert the OuDia value of whether the train line is bold.  (in the diagram view) to numeric parameter (pixel width).
+   *
+   * @param {string} str
+   * @return {number}
+   */
+  public static lineIsBoldToWeight(str: string): number {
+    switch (str) {
+      case '1':
+        return 2;
+      default:
+        return 1;
+    }
+  }
 
   toJSON() {
     return {
