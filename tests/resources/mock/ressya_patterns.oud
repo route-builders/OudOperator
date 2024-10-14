@@ -60,6 +60,15 @@ DiagramSenColor=00000000
 DiagramSenStyle=SenStyle_Jissen
 StopMarkDrawType=EStopMarkDrawType_Nothing
 .
+Ressyasyubetsu.
+Syubetsumei=traintype_bold
+JikokuhyouMojiColor=00000000
+JikokuhyouFontIndex=0
+DiagramSenColor=00000000
+DiagramSenStyle=SenStyle_Jissen
+DiagramSenIsBold=1
+StopMarkDrawType=EStopMarkDrawType_Nothing
+.
 Dia.
 DiaName=target_dia
 Kudari.
